@@ -1,0 +1,45 @@
+---
+
+- hosts: debian
+  gather_facts: Yes
+  remote_user: root
+
+  tasks:
+    - name: include os tasks
+      include: os.yaml
+      tags:
+        - os
+    - name: include users tasks
+      include: users.yaml
+      tags:
+        - users
+    - name: include samba tasks
+      include: samba.yaml
+      tags:
+        - samba
+    - name: include ftp tasks
+      include: ftp.yaml
+      tags:
+        - ftp
+    - name: include httpd tasks
+      include: httpd.yaml
+      tags:
+        - httpd
+
+  handlers:
+    - name: restart webmin
+      service:
+        name: webmin
+        state: restarted
+    - name: restart samba
+      service:
+        name: smbd
+        state: restarted
+    - name: restart httpd
+      service:
+        name: apache2
+        state: restarted
+    - name: restart ftp
+      service:
+        name: proftpd
+        state: restarted

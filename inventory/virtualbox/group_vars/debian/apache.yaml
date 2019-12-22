@@ -1,0 +1,11 @@
+---
+
+apache_user: 'www-data'
+apache_group: 'www-data'
+html_dir: 'www'
+cgi_dir: 'cgi-bin'
+httpd_modules:
+  - auth_basic
+  - mpm_prefork
+  - autoindex
+  - php7.0

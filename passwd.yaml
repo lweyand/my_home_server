@@ -1,0 +1,11 @@
+
+---
+
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - debug:
+        var: ('muzo'| hash('sha1'))
+    - debug:
+        var: ('muzo'|password_hash('sha512'))

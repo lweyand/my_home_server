@@ -1,0 +1,72 @@
+./b_warg_ai_wl
+total 24
+drwxr-xr-x  6 root  root        4096 janv. 20  2016 .
+drwxr-xr-x 19 root  root        4096 d�c.  3 22:47 ..
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 .AppleDesktop
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 cgi-bin
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 files
+drwxr-s---  2 admin moitoutseul 4096 d�c.  3 22:29 html
+./b_warg_ai_np
+total 24
+drwxr-xr-x  6 root  root        4096 janv. 20  2016 .
+drwxr-xr-x 19 root  root        4096 d�c.  3 22:47 ..
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 .AppleDesktop
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 cgi-bin
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 files
+drwxr-s---  2 admin moitoutseul 4096 d�c.  3 22:27 html
+./b_warg_lwp
+total 24
+drwxr-xr-x  6 root  root        4096 janv. 20  2016 .
+drwxr-xr-x 19 root  root        4096 d�c.  3 22:47 ..
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 .AppleDesktop
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 cgi-bin
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 files
+drwxr-s---  2 admin moitoutseul 4096 d�c.  3 22:32 html
+./b_w_g_r_g_na
+total 24
+drwxr-xr-x  6 root root        4096 janv. 20  2016 .
+drwxr-xr-x 19 root root        4096 d�c.  3 22:47 ..
+drwxrws---  2 root moitoutseul 4096 janv. 20  2016 .AppleDesktop
+drwxrws---  2 root moitoutseul 4096 janv. 20  2016 cgi-bin
+drwxrws---  2 root moitoutseul 4096 janv. 20  2016 files
+drwxrws---  2 root moitoutseul 4096 d�c.  3 22:25 html
+./b_w_a_r_g_na -> 2
+total 24
+drwxr-xr-x  6 root  root        4096 janv. 20  2016 .
+drwxr-xr-x 19 root  root        4096 d�c.  3 22:47 ..
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 .AppleDesktop
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 cgi-bin
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 files
+drwxr-s---  2 admin moitoutseul 4096 d�c.  3 22:24 html
+./b_gh_warg_ln
+total 24
+drwxr-xr-x  6 root  root        4096 janv. 20  2016 .
+drwxr-xr-x 19 root  root        4096 d�c.  3 22:47 ..
+drwxr-s---  2 admin hannoerth_g 4096 janv. 20  2016 .AppleDesktop
+drwxr-s---  2 admin hannoerth_g 4096 janv. 20  2016 cgi-bin
+drwxr-s---  2 admin hannoerth_g 4096 janv. 20  2016 files
+drwxr-s---  2 admin hannoerth_g 4096 d�c.  3 22:46 html
+./b_w_g_r_a_na -> 2
+total 24
+drwxr-xr-x  6 root  root        4096 janv. 20  2016 .
+drwxr-xr-x 19 root  root        4096 d�c.  3 22:47 ..
+drwxrwsr-x  2 admin moitoutseul 4096 janv. 20  2016 .AppleDesktop
+drwxrwsr-x  2 admin moitoutseul 4096 janv. 20  2016 cgi-bin
+drwxrwsr-x  2 admin moitoutseul 4096 janv. 20  2016 files
+drwxrwsr-x  2 admin moitoutseul 4096 d�c.  3 22:21 html
+./b_warg_ai_wp -> 2
+total 24
+drwxr-xr-x  6 root  root        4096 janv. 20  2016 .
+drwxr-xr-x 19 root  root        4096 d�c.  3 22:47 ..
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 .AppleDesktop
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 cgi-bin
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 files
+drwxr-s---  2 admin moitoutseul 4096 d�c.  3 22:28 html
+./b_warg_lnp -> 2
+total 24
+drwxr-xr-x  6 root  root        4096 janv. 20  2016 .
+drwxr-xr-x 19 root  root        4096 d�c.  3 22:47 ..
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 .AppleDesktop
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 cgi-bin
+drwxr-s---  2 admin moitoutseul 4096 janv. 20  2016 files
+drwxr-s---  2 admin moitoutseul 4096 d�c.  3 22:31 html

@@ -1,0 +1,5 @@
+---
+
+proftpd_base_conf: /etc/proftpd/
+proftpd_user: root
+proftpd_group: root

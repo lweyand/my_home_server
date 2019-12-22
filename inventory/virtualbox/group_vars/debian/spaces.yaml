@@ -1,0 +1,165 @@
+---
+
+#Droits d'accès sur les espaces:
+#  - file_sharing: Accès authentifié par le partage de fichiers ou le protocole FTP: impact samba, ftp
+#      - write_user_read_group: Écriture=Admin, Lecture=Groupe
+#      - write_group_read_all: Écriture=Groupe, Lecture=Tous
+#      - write_group_read_group: Écriture=Groupe, Lecture=Groupe
+#  - web_access: Accès public par le Web ou le protocole FTP anonyme: impact http, ftp
+#      - all_internet_no_password: Tout Internet (aucun mot de passe requis)Réseau local (aucun mot de passe requis)
+#      - all_internet_with_password: Tout Internet (mot de passe requis)
+#      - all_internet_with_password_except_local: Tout Internet (mot de passe requis en dehors des réseaux locaux)
+#      - lan_no_password: Réseau local (aucun mot de passe requis)
+#      - lan_with_password: Réseau local (mot de passe requis)
+#      - no_access: Aucun accès
+#  - exec_dynamic: Exécution de contenu dynamique (CGI, PHP, SSI): impact http
+#      - disable: Désactivé
+#      - enable: Activé
+
+spaces:
+  primary:
+    user: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+    comment: "primary"
+    services:
+      - http
+    file_sharing: "write_user_read_group"
+    web_access: "no_access"
+    exec_dynamic: "disable"
+  write_user_read_group_noaccess_disable_b:
+    user: muzo
+    group: muzo_g
+    comment: "write_user_read_group_noaccess_disable"
+    services:
+      - http
+      - samba
+      - ftp
+    file_sharing: "write_user_read_group"
+    web_access: "no_access"
+    exec_dynamic: "disable"
+  write_group_read_all_noaccess_disable_b:
+    user: muzo
+    group: muzo_g
+    comment: "write_group_read_all_noaccess_disable"
+    services:
+      - http
+      - samba
+      - ftp
+    file_sharing: "write_group_read_all"
+    web_access: "no_access"
+    exec_dynamic: "disable"
+  write_group_read_group_noaccess_disable_b:
+    user: muzo
+    group: muzo_g
+    comment: "write_group_read_group_noaccess_disable"
+    services:
+      - http
+      - samba
+      - ftp
+    file_sharing: "write_group_read_group"
+    web_access: "no_access"
+    exec_dynamic: "disable"
+  write_user_read_group_all_internet_no_password_disable_b:
+    user: muzo
+    group: muzo_g
+    comment: "write_user_read_group_all_internet_no_password_disable"
+    services:
+      - http
+      - samba
+      - ftp
+    file_sharing: "write_user_read_group"
+    web_access: "all_internet_no_password"
+    exec_dynamic: "disable"
+  write_user_read_group_all_internet_with_password_disable_b:
+    user: muzo
+    group: muzo_g
+    comment: "write_user_read_group_all_internet_with_password_disable"
+    services:
+      - http
+      - samba
+      - ftp
+    file_sharing: "write_user_read_group"
+    web_access: "all_internet_with_password"
+    exec_dynamic: "disable"
+  write_user_read_group_all_internet_with_password_except_local_disable_b:
+    user: muzo
+    group: muzo_g
+    comment: "write_user_read_group_all_internet_with_password_except_local_disable"
+    services:
+      - http
+      - samba
+      - ftp
+    file_sharing: "write_user_read_group"
+    web_access: "all_internet_with_password_except_local"
+    exec_dynamic: "disable"
+  write_user_read_group_lan_no_password_disable_b:
+    user: muzo
+    group: muzo_g
+    comment: "write_user_read_group_lan_no_password_disable"
+    services:
+      - http
+      - samba
+      - ftp
+    file_sharing: "write_user_read_group"
+    web_access: "lan_no_password"
+    exec_dynamic: "disable"
+  write_user_read_group_lan_with_password_disable_b:
+    services:
+      - http
+      - samba
+      - ftp
+    user: muzo
+    group: muzo_g
+    comment: "write_user_read_group_lan_with_password_disable"
+    file_sharing: "write_user_read_group"
+    web_access: "lan_with_password"
+    exec_dynamic: "disable"
+  write_user_read_group_noaccess_enable_b:
+    services:
+      - http
+      - samba
+      - ftp
+    user: muzo
+    group: muzo_g
+    comment: "write_user_read_group_noaccess_disable"
+    file_sharing: "write_user_read_group"
+    web_access: "no_access"
+    exec_dynamic: "enable"
+  ftp_only_b:
+    services:
+      - ftp
+    user: muzo
+    group: muzo_g
+    comment: "only_ftp_bay"
+    file_sharing: "write_user_read_group"
+    web_access: "no_access"
+    exec_dynamic: "disable"
+  samba_only_b:
+    services:
+      - samba
+    user: muzo
+    group: muzo_g
+    comment: "only_samba_bay"
+    file_sharing: "write_user_read_group"
+    web_access: "no_access"
+    exec_dynamic: "disable"
+  http_only_b:
+    services:
+      - http
+    user: muzo
+    group: muzo_g
+    comment: "only_http_bay"
+    file_sharing: "write_user_read_group"
+    web_access: "no_access"
+    exec_dynamic: "disable"
+  group_hannoerth_write_user_read_group_lan_no_password_disable_b:
+    user: muzo
+    group: poto_g
+    comment: "group_hannoerth_write_user_read_group_lan_no_password_disable_b"
+    services:
+      - http
+      - samba
+      - ftp
+    file_sharing: "write_user_read_group"
+    web_access: "lan_no_password"
+    exec_dynamic: "disable"

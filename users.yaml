@@ -1,0 +1,31 @@
+---
+
+- name: Create groups
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ server_groups }}"
+
+- name: Create user
+  user:
+    name: "{{ item.user }}"
+    group: "{{ item.group }}"
+    groups: "{% if item.groups is defined %}{{ item.groups | join(',') }}{% else %}{%endif%}"
+    shell: "{{ item.shell }}"
+    password: "{{ item.password }}"
+    state: present
+  with_items:
+    - "{{ server_users }}"
+
+- name: Update Apache Httpd user
+  # /etc/passwd
+  # www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+  # /etc/group
+  # www-data:x:33:
+  # /etc/shadow
+  # www-data:*:17680:0:99999:7:::
+  user:
+    name: 'www-data'
+    groups: "{{ server_groups | join(',') }}"
+    state: present

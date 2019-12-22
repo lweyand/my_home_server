@@ -1,0 +1,3 @@
+samba_root: "{{ base_path }}"
+samba_workgroup: "BUTTERFLYEFFECT"
+samba_netbios_name: "server_test"

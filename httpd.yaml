@@ -1,0 +1,235 @@
+---
+
+- name: debug password hard
+  debug:
+    msg: "{{ server_users | json_query(\"[?user=='muzo'].password\") }}"
+  #loop: "{{ lookup('dict', spaces) }}"
+- name: debug owner
+  debug:
+    msg: "{{ item.value.user }}"
+  when: "'http' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+- name: debug password dyn
+  debug:
+    msg: "{{ server_users | json_query(query) }}"
+  vars:
+    query: "[?user=='{{ item.value.user }}'].password"
+  when: "'http' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+
+- name: Install apache2 & php7
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - apache2
+  - php7.0
+  - libapache2-mod-php7.0
+  - php7.0-curl
+  - php7.0-gd
+  - php-pear
+  - php7.0-imagick
+  - php7.0-mcrypt
+  - php7.0-dev
+  - libpcre3-dev
+#  configurer webmin avec php7:
+#       /etc/php/7.0/apache2/php.ini=Configuration for mod_php
+# /etc/php5/cgi/php.ini=Configuration for scripts run via CGI
+# /etc/php/7.0/cli/php.ini=Configuration for command-line scripts
+
+- name: Apache| Create passwd dir
+  file:
+    path: "/etc/apache2/conf"
+    state: directory
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+
+- name: Apache| Deploy config
+  template:
+    src: "templates/apache2/apache2.conf"
+    dest: "/etc/apache2/apache2.conf"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+  notify:
+    - restart httpd
+
+- name: Apache| Create space directory
+  file:
+    path: "{{ base_path }}/{{ item.key }}"
+    state: directory
+    mode: "00755"
+    owner: 'root'
+    group: 'root'
+  when: "'samba' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Apache| Create apache directory html
+  file:
+    path: "{{ base_path }}/{{ item.key }}/{{ html_dir }}"
+    state: directory
+    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
+    owner: "{% if 'write_user_read_group' == item.value.file_sharing %}{{ item.value.user }}{% else %}www-data{% endif %}"
+    group: "{{ item.value.group }}"
+  when: "'http' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Apache| Create apache directory cgi
+  file:
+    path: "{{ base_path }}/{{ item.key }}/{{ cgi_dir }}"
+    state: directory
+    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
+    owner: "{% if 'write_user_read_group' == item.value.file_sharing %}{{ item.value.user }}{% else %}www-data{% endif %}"
+    group: "{{ item.value.group }}"
+  when: "'http' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Apache| Add apache user to group
+  user:
+    name: "{{ apache_user }}"
+    groups: "{{ item.value.group }}"
+    state: present
+  when: "'http' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Apache| Create password files by ibay
+  htpasswd:
+    path: "/etc/apache2/conf/{{ item.key }}.passwd"
+    name: "{{ item.value.user }}"
+    password: "{{ server_users | json_query(query) | first }}"
+    owner: root
+    group: "{{ apache_group }}"
+    mode: 0640
+  when: "'http' in item.value.services and 'primary' != item.key"
+  loop: "{{ lookup('dict', spaces) }}"
+  vars:
+    query: "[?user=='{{ item.value.user }}'].password"
+
+- name: Apache| Deploy base configuration
+  copy:
+#  template:
+    src: "templates/apache2/apache2.conf"
+    dest: "/etc/apache2/apache2.conf"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+    backup: yes
+  notify:
+    - restart httpd
+
+- name: Apache| Deploy default virtual hosts Configuration
+  template:
+    src: "templates/apache2/default-virtualhost.conf"
+    dest: "/etc/apache2/sites-available/default.conf"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+  notify:
+      - restart httpd
+- name: Apache| Create symlink to activate default
+  file:
+    src: "/etc/apache2/sites-available/default.conf"
+    dest: "/etc/apache2/sites-enabled/000-default.conf"
+    state: link
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+  notify:
+      - restart httpd
+
+
+- name: Apache| Deploy virtual hosts Configuration
+  template:
+    src: "templates/apache2/space-virtualhost.conf"
+    dest: "/etc/apache2/sites-available/{{ item.key }}.conf"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+  when: "'http' in item.value.services and 'no_access' != item.value.web_access"
+  loop: "{{ lookup('dict', spaces) }}"
+  notify:
+    - restart httpd
+- name: Apache| Create symlink to activate
+  file:
+    src: "/etc/apache2/sites-available/{{ item.key }}.conf"
+    dest: "/etc/apache2/sites-enabled/{{ '%03d' | format(my_idx) }}-{{ item.key }}.conf"
+    state: link
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+  when: "'http' in item.value.services and 'no_access' != item.value.web_access"
+  loop: "{{ lookup('dict', spaces) }}"
+  loop_control:
+    index_var: my_idx
+  notify:
+    - restart httpd
+
+- name: Apache| Load modules
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  with_items:
+  - "{{ httpd_modules }}"
+  notify:
+    - restart httpd
+
+- name: Apache| Deploy base index html
+  template:
+    src: "templates/tests/apache2/index.html"
+    dest: "{{ base_path }}/{{ item.key }}/{{ html_dir }}/index.html"
+    owner: "{{ item.value.user }}"
+    group: "{{ item.value.group }}"
+  when: "'http' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+  notify:
+    - restart httpd
+- name: Apache| Deploy base index php
+  template:
+    src: "templates/tests/apache2/index.php"
+    dest: "{{ base_path }}/{{ item.key }}/{{ html_dir }}/index.php"
+    owner: "{{ item.value.user }}"
+    group: "{{ item.value.group }}"
+  when: "'http' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+  notify:
+    - restart httpd
+
+# Let's encrypt
+# https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-debian-9
+# https://wiki.debian.org/fr/LetsEncrypt
+# https://loige.co/using-lets-encrypt-and-certbot-to-automate-the-creation-of-certificates-for-openvpn/
+- name: Install certbot
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - certbot
+    - python-certbot-apache
+
+#  sudo certbot certonly \
+#  --standalone \
+#  --non-interactive \
+#  --agree-tos \
+#  --email YOUR_CERTIFICATE_EMAIL \
+#  --domains YOUR_DOMAIN
+
+#certbot certonly \
+#  --standalone \
+#  --non-interactive \
+#  --agree-tos \
+#  --email nest_of_muzo@hotmail.com \
+#  --domains www.test-muzo.com \
+#  --pre-hook 'service apache2 stop' \
+#  --pre-hook 'service apache2 start'
+
+#  root@pc-00200:~# certbot certonly   --standalone   --non-interactive   --agree-tos   --email nest_of_muzo@hotmail.com   --domains www.test-muzo.com
+#  Saving debug log to /var/log/letsencrypt/letsencrypt.log
+#Plugins selected: Authenticator standalone, Installer None
+#  Obtaining a new certificate
+#Performing the following challenges:
+#  http-01 challenge for www.test-muzo.com
+#  Cleaning up challenges
+#Problem binding to port 80: Could not bind to IPv4 or IPv6.
+#
+#IMPORTANT NOTES:
+#  - Your account credentials have been saved in your Certbot
+#    configuration directory at /etc/letsencrypt. You should make a
+#    secure backup of this folder now. This configuration directory will
+#    also contain certificates and private keys obtained by Certbot so
+#    making regular backups of this folder is ideal.
+

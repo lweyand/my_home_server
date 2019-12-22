@@ -1,0 +1,48 @@
+---
+
+- name: Install proftpd
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - proftpd-basic
+
+- name: Proftpd| Create ftp directory files
+  file:
+    path: "{{ base_path }}/{{ item.key }}/files"
+    state: directory
+    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
+    owner: "{{ item.value.user }}"
+    group: "{{ item.value.group }}"
+  when: "'ftp' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Proftpd| Deploy base configuration
+  template:
+    src: 'templates/proftpd/proftpd.conf'
+    dest: '/etc/proftpd/proftpd.conf'
+    owner: "{{ proftpd_user }}"
+    group: "{{ proftpd_group }}"
+    backup: yes
+  notify:
+    - restart ftp
+
+- name: Proftpd| Deploy default virtual hosts Configuration
+  template:
+    src: "templates/proftpd/default-virtualhost.conf"
+    dest: "/etc/proftpd/conf.d/default.conf"
+    owner: "{{ proftpd_user }}"
+    group: "{{ proftpd_user }}"
+  notify:
+    - restart ftp
+
+- name: Proftpd| Deploy virtual hosts Configuration
+  template:
+    src: "templates/proftpd/space-virtualhost.conf"
+    dest: "/etc/proftpd/conf.d/{{ item.key }}.conf"
+    owner: "{{ proftpd_user }}"
+    group: "{{ proftpd_user }}"
+  when: "'ftp' in item.value.services and 'no_access' != item.value.web_access"
+  loop: "{{ lookup('dict', spaces) }}"
+  notify:
+    - restart ftp

@@ -1,0 +1,40 @@
+#------------------------------------------------------------
+# wikilocal_b ibay directories (wiki du lan)
+#------------------------------------------------------------
+
+# wikilocal_b ibay (wiki du lan)
+
+ScriptAlias /wikilocal_b/cgi-bin /home/e-smith/files/ibays/wikilocal_b/cgi-bin
+Alias       /wikilocal_b/files   /home/e-smith/files/ibays/wikilocal_b/files
+Alias       /wikilocal_b        /home/e-smith/files/ibays/wikilocal_b/html
+
+<Directory /home/e-smith/files/ibays/wikilocal_b/html>
+    Options None
+    Options +Indexes
+    Options +Includes
+    AllowOverride None
+    order deny,allow
+    deny from all
+    allow from 127.0.0.1 192.168.66.0/255.255.255.0
+</Directory>
+
+<Directory /home/e-smith/files/ibays/wikilocal_b/cgi-bin>
+    Options ExecCGI
+    AllowOverride None
+    order deny,allow
+    deny from all
+    allow from 127.0.0.1 192.168.66.0/255.255.255.0
+</Directory>
+
+<Directory /home/e-smith/files/ibays/wikilocal_b/files>
+    AllowOverride None
+    order deny,allow
+    deny from all
+    allow from 127.0.0.1 192.168.66.0/255.255.255.0
+</Directory>
+
+<Directory /home/e-smith/files/ibays/wikilocal_b/html>
+    AddType application/x-httpd-php .php .php3 .phtml
+    AddType application/x-httpd-php-source .phps
+    php_admin_value open_basedir /home/e-smith/files/ibays/wikilocal_b/
+</Directory>

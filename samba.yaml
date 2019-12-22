@@ -1,0 +1,91 @@
+---
+
+- debug:
+    var: inventory_hostname
+
+- name: install samba
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - attr
+  - libaio1
+  - libavahi-client3
+  - libavahi-common-data
+  - libavahi-common3
+  - libcups2
+  - libfile-copy-recursive-perl
+  - libgpgme11
+  - libldb1
+  - libpython2.7
+  - libtalloc2
+  - libtdb1
+  - libtevent0
+  - libwbclient0
+  - python-crypto
+  - python-dnspython
+  - python-ldb
+  - python-samba
+  - python-talloc
+  - python-tdb
+  - samba
+  - samba-common
+  - samba-common-bin
+  - samba-dsdb-modules
+  - samba-libs
+  - samba-vfs-modules
+  - tdb-tools
+  - update-inetd
+
+- name: Samba| Create space directory
+  file:
+    path: "{{ base_path }}/{{ item.key }}"
+    state: directory
+    mode: "00755"
+    owner: 'root'
+    group: 'root'
+  when: "'samba' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Samba| Create samba directory files
+  file:
+    path: "{{ base_path }}/{{ item.key }}/files"
+    state: directory
+    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
+    owner: "{{ item.value.user }}"
+    group: "{{ item.value.group }}"
+  when: "'samba' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Samba| Create samba users
+  shell: "printf '{{ server_users | json_query(query) | first }}\n{{ server_users | json_query(query) | first }}\n' | smbpasswd -s -a {{ item.value.user }}"
+  register: smbpasswd
+  changed_when: "'Added user' in smbpasswd.stdout"
+  when: "'samba' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+  vars:
+    query: "[?user=='{{ item.value.user }}'].password"
+  notify:
+    - restart samba
+
+- name: Samba| Configure global samba
+  template:
+    src: templates/samba/global.conf
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: 0644
+    validate: 'testparm -s %s'
+  notify:
+    - restart samba
+
+- name: Samba| Configure samba spaces
+  blockinfile:
+    dest: /etc/samba/smb.conf
+    block: "{{ lookup('template', 'templates/samba/directory.conf') }}"
+    marker: "; {mark} ANSIBLE MANAGED BLOCK FOR {{ item.key }}"
+    validate: 'testparm -s %s'
+  when: "'samba' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+  notify:
+    - restart samba
