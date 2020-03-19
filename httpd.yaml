@@ -1,49 +1,13 @@
 ---
 
-- name: debug password hard
-  debug:
-    msg: "{{ server_users | json_query(\"[?user=='muzo'].password\") }}"
-  #loop: "{{ lookup('dict', spaces) }}"
-- name: debug owner
-  debug:
-    msg: "{{ item.value.user }}"
-  when: "'http' in item.value.services"
-  loop: "{{ lookup('dict', spaces) }}"
-- name: debug password dyn
-  debug:
-    msg: "{{ server_users | json_query(query) }}"
-  vars:
-    query: "[?user=='{{ item.value.user }}'].password"
-  when: "'http' in item.value.services"
-  loop: "{{ lookup('dict', spaces) }}"
-
-
-- name: Install apache2 & php7
+- name: Apache| Install apache2 & php7
   apt:
-    name: "{{ item }}"
+    name: "{{ httpd_packages | join(',') }}"
     state: present
-  with_items:
-  - apache2
-  - php7.0
-  - libapache2-mod-php7.0
-  - php7.0-curl
-  - php7.0-gd
-  - php-pear
-  - php7.0-imagick
-  - php7.0-mcrypt
-  - php7.0-dev
-  - libpcre3-dev
 #  configurer webmin avec php7:
 #       /etc/php/7.0/apache2/php.ini=Configuration for mod_php
 # /etc/php5/cgi/php.ini=Configuration for scripts run via CGI
 # /etc/php/7.0/cli/php.ini=Configuration for command-line scripts
-
-- name: Apache| Create passwd dir
-  file:
-    path: "/etc/apache2/conf"
-    state: directory
-    owner: "{{ apache_user }}"
-    group: "{{ apache_group }}"
 
 - name: Apache| Deploy config
   template:
@@ -53,57 +17,6 @@
     group: "{{ apache_group }}"
   notify:
     - restart httpd
-
-- name: Apache| Create space directory
-  file:
-    path: "{{ base_path }}/{{ item.key }}"
-    state: directory
-    mode: "00755"
-    owner: 'root'
-    group: 'root'
-  when: "'samba' in item.value.services"
-  loop: "{{ lookup('dict', spaces) }}"
-
-- name: Apache| Create apache directory html
-  file:
-    path: "{{ base_path }}/{{ item.key }}/{{ html_dir }}"
-    state: directory
-    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
-    owner: "{% if 'write_user_read_group' == item.value.file_sharing %}{{ item.value.user }}{% else %}www-data{% endif %}"
-    group: "{{ item.value.group }}"
-  when: "'http' in item.value.services"
-  loop: "{{ lookup('dict', spaces) }}"
-
-- name: Apache| Create apache directory cgi
-  file:
-    path: "{{ base_path }}/{{ item.key }}/{{ cgi_dir }}"
-    state: directory
-    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
-    owner: "{% if 'write_user_read_group' == item.value.file_sharing %}{{ item.value.user }}{% else %}www-data{% endif %}"
-    group: "{{ item.value.group }}"
-  when: "'http' in item.value.services"
-  loop: "{{ lookup('dict', spaces) }}"
-
-- name: Apache| Add apache user to group
-  user:
-    name: "{{ apache_user }}"
-    groups: "{{ item.value.group }}"
-    state: present
-  when: "'http' in item.value.services"
-  loop: "{{ lookup('dict', spaces) }}"
-
-- name: Apache| Create password files by ibay
-  htpasswd:
-    path: "/etc/apache2/conf/{{ item.key }}.passwd"
-    name: "{{ item.value.user }}"
-    password: "{{ server_users | json_query(query) | first }}"
-    owner: root
-    group: "{{ apache_group }}"
-    mode: 0640
-  when: "'http' in item.value.services and 'primary' != item.key"
-  loop: "{{ lookup('dict', spaces) }}"
-  vars:
-    query: "[?user=='{{ item.value.user }}'].password"
 
 - name: Apache| Deploy base configuration
   copy:
@@ -123,7 +36,7 @@
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
   notify:
-      - restart httpd
+    - restart httpd
 - name: Apache| Create symlink to activate default
   file:
     src: "/etc/apache2/sites-available/default.conf"
@@ -132,7 +45,7 @@
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
   notify:
-      - restart httpd
+    - restart httpd
 
 
 - name: Apache| Deploy virtual hosts Configuration
@@ -212,8 +125,8 @@
 #  --standalone \
 #  --non-interactive \
 #  --agree-tos \
-#  --email nest_of_muzo@hotmail.com \
-#  --domains www.test-muzo.com \
+#  --email YOUR_CERTIFICATE_EMAIL \
+#  --domains YOUR_DOMAIN \
 #  --pre-hook 'service apache2 stop' \
 #  --pre-hook 'service apache2 start'
 

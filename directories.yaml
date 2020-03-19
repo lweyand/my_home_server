@@ -1,0 +1,59 @@
+---
+
+- name: Directories| Create spaces directory
+  file:
+    path: "{{ base_path }}/{{ item.key }}"
+    state: directory
+    mode: "00755"
+    owner: 'root'
+    group: 'root'
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Directories| Create apache directory html
+  file:
+    path: "{{ base_path }}/{{ item.key }}/{{ html_dir }}"
+    state: directory
+    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
+    owner: "{% if 'write_user_read_group' == item.value.file_sharing %}{{ item.value.user }}{% else %}www-data{% endif %}"
+    group: "{{ item.value.group }}"
+  when: "'http' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Directories| Create apache directory cgi
+  file:
+    path: "{{ base_path }}/{{ item.key }}/{{ cgi_dir }}"
+    state: directory
+    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
+    owner: "{% if 'write_user_read_group' == item.value.file_sharing %}{{ item.value.user }}{% else %}www-data{% endif %}"
+    group: "{{ item.value.group }}"
+  when: "'http' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Directories| Create ftp/samba directory files
+  file:
+    path: "{{ base_path }}/{{ item.key }}/{{ ftp_dir }}"
+    state: directory
+    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
+    owner: "{%if item.value.user is defined %}{{ item.value.user }}{%else%}admin{%endif%}"
+    group: "{%if item.value.group is defined %}{{ item.value.group }}{%else%}www-data{%endif%}"
+  when: "'ftp' in item.value.services or 'samba' in item.value.services"
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Directories| Create users dir
+  file:
+    path: "{{ base_path }}/{{ users_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: 0755
+
+- name: Directories| Create users home dir
+  file:
+    path: "{{ base_path }}/{{ users_dir }}/{{ item.user }}/home"
+    state: directory
+    owner: "{{ item.user }}"
+    group: "{{ item.group }}"
+    mode: 0700
+  when: "'ftp' in item.access"
+  with_items:
+    - "{{ server_users }}"

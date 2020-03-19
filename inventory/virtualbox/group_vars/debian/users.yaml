@@ -1,5 +1,7 @@
 ---
 
+users_dir: 'users'
+
 server_groups:
   - admin_g
   - muzo_g

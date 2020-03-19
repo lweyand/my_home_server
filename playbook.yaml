@@ -9,6 +9,10 @@
       include: os.yaml
       tags:
         - os
+    - name: include directories tasks
+      include: directories.yaml
+      tags:
+        - os
     - name: include users tasks
       include: users.yaml
       tags:
@@ -27,10 +31,6 @@
         - httpd
 
   handlers:
-    - name: restart webmin
-      service:
-        name: webmin
-        state: restarted
     - name: restart samba
       service:
         name: smbd

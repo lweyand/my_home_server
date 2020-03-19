@@ -1,19 +1,16 @@
 ---
 
-- name: Install proftpd
+- name: Proftpd| Install proftpd
   apt:
-    name: "{{ item }}"
+    name: "{{ proftpd_packages | join(',') }}"
     state: present
-  with_items:
-  - proftpd-basic
 
-- name: Proftpd| Create ftp directory files
-  file:
-    path: "{{ base_path }}/{{ item.key }}/files"
-    state: directory
-    mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
-    owner: "{{ item.value.user }}"
-    group: "{{ item.value.group }}"
+- name: Proftpd| Deploy default file
+  template:
+    src: "templates/tests/proftpd/file.txt"
+    dest: "{{ base_path }}/{{ item.key }}/{{ ftp_dir }}/{{ item.key }}.txt"
+    owner: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
+    group: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
   when: "'ftp' in item.value.services"
   loop: "{{ lookup('dict', spaces) }}"
 
@@ -23,26 +20,17 @@
     dest: '/etc/proftpd/proftpd.conf'
     owner: "{{ proftpd_user }}"
     group: "{{ proftpd_group }}"
-    backup: yes
+    backup: no
   notify:
     - restart ftp
 
-- name: Proftpd| Deploy default virtual hosts Configuration
+- name: Proftpd| Deploy directory Configuration
   template:
-    src: "templates/proftpd/default-virtualhost.conf"
-    dest: "/etc/proftpd/conf.d/default.conf"
-    owner: "{{ proftpd_user }}"
-    group: "{{ proftpd_user }}"
-  notify:
-    - restart ftp
-
-- name: Proftpd| Deploy virtual hosts Configuration
-  template:
-    src: "templates/proftpd/space-virtualhost.conf"
+    src: "templates/proftpd/space-directory.conf"
     dest: "/etc/proftpd/conf.d/{{ item.key }}.conf"
     owner: "{{ proftpd_user }}"
     group: "{{ proftpd_user }}"
-  when: "'ftp' in item.value.services and 'no_access' != item.value.web_access"
+#  when: "'ftp' in item.value.services"
   loop: "{{ lookup('dict', spaces) }}"
   notify:
     - restart ftp

@@ -1,24 +1,25 @@
 ---
 
-- name: Create groups
+- name: Users| Create groups
   group:
     name: "{{ item }}"
     state: present
   with_items:
     - "{{ server_groups }}"
 
-- name: Create user
+- name: Users| Create users
   user:
     name: "{{ item.user }}"
     group: "{{ item.group }}"
     groups: "{% if item.groups is defined %}{{ item.groups | join(',') }}{% else %}{%endif%}"
     shell: "{{ item.shell }}"
-    password: "{{ item.password }}"
+    password: "{{ item.password | password_hash('sha512', 'mysecretsalt') }}"
+    home: "{{ base_path }}/{{ users_dir }}/{{ item.user }}/home"
     state: present
   with_items:
     - "{{ server_users }}"
 
-- name: Update Apache Httpd user
+- name: Users| Update Apache Httpd user
   # /etc/passwd
   # www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
   # /etc/group
@@ -26,6 +27,25 @@
   # /etc/shadow
   # www-data:*:17680:0:99999:7:::
   user:
-    name: 'www-data'
+    name: "{{ apache_user }}"
+    group: "{{ apache_group }}"
     groups: "{{ server_groups | join(',') }}"
+#    home: "{{ base_path }}"
     state: present
+
+- name: Users| Create spaces technical groups
+  group:
+    name: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
+    state: present
+  loop: "{{ lookup('dict', spaces) }}"
+
+- name: Users| Create spaces technical users
+  user:
+    name: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
+    group: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
+    groups: "{% if item.value.group is defined %}{{ item.value.group }}{% else %}{%endif%}"
+    shell: "/bin/false"
+    #    password: "{{ item.password | password_hash('sha512', 'mysecretsalt') }}"
+    home: "{{ base_path }}/{{ item.key }}"
+    state: present
+  loop: "{{ lookup('dict', spaces) }}"
