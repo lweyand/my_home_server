@@ -1,5 +1,11 @@
 ---
 
+- name: Users| Compute server_groups
+  set_fact:
+    server_groups: "{{ server_users | dict2items | json_query(select_query) }}"
+  vars:
+    select_query: "[*].value.group"
+
 - name: Users| Create groups
   group:
     name: "{{ item }}"
@@ -7,17 +13,20 @@
   with_items:
     - "{{ server_groups }}"
 
+- name: Users| Compute users and passwords
+  set_fact:
+    server_users_psswds: "{{ server_users | combine(server_passwords, recursive=True)}}"
+
 - name: Users| Create users
   user:
-    name: "{{ item.user }}"
-    group: "{{ item.group }}"
-    groups: "{% if item.groups is defined %}{{ item.groups | join(',') }}{% else %}{%endif%}"
-    shell: "{{ item.shell }}"
-    password: "{{ item.password | password_hash('sha512', 'mysecretsalt') }}"
-    home: "{{ base_path }}/{{ users_dir }}/{{ item.user }}/home"
+    name: "{{ item.key }}"
+    group: "{{ item.value.group }}"
+    groups: "{% if item.value.groups is defined %}{{ item.value.groups | join(',') }}{% else %}{%endif%}"
+    shell: "{{ item.value.shell }}"
+    password: "{{ item.value.password | password_hash('sha512', secret_salt) }}"
+    home: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
     state: present
-  with_items:
-    - "{{ server_users }}"
+  loop: "{{ lookup('dict', server_users_psswds ) }}"
 
 - name: Users| Update Apache Httpd user
   # /etc/passwd
@@ -30,7 +39,6 @@
     name: "{{ apache_user }}"
     group: "{{ apache_group }}"
     groups: "{{ server_groups | join(',') }}"
-#    home: "{{ base_path }}"
     state: present
 
 - name: Users| Create spaces technical groups
@@ -43,9 +51,8 @@
   user:
     name: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
     group: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
-    groups: "{% if item.value.group is defined %}{{ item.value.group }}{% else %}{%endif%}"
+    comment: "{% if item.value.comment is defined %}{{ item.value.comment }}{% else %}{%endif%}"
     shell: "/bin/false"
-    #    password: "{{ item.password | password_hash('sha512', 'mysecretsalt') }}"
     home: "{{ base_path }}/{{ item.key }}"
     state: present
   loop: "{{ lookup('dict', spaces) }}"

@@ -13,17 +13,6 @@
     name: python-pip
     state: present
 
-# - name: Update resolv.conf
-#   lineinfile:
-#     path: /etc/resolv.conf
-#     regexp: '^nameserver '
-#     line: 'nameserver 8.8.8.8'
-# - name: Restart service networking
-#   service:
-#     name: networking
-#     state: restarted
-#  command: resolvconf -a enp0s3.inet
-
 - name: OS| Install python passlib
   pip:
     name: passlib
@@ -35,12 +24,3 @@
     mode: 0775
     owner: root
     group: root
-
-#- name: OS| Create space directory
-#  file:
-#    path: "{{ base_path }}/{{ item.key }}"
-#    state: directory
-#    mode: "00755"
-#    owner: 'root'
-#    group: 'root'
-#  loop: "{{ lookup('dict', spaces) }}"

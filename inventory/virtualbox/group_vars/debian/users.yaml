@@ -1,47 +1,36 @@
 ---
 
-users_dir: 'users'
-
-server_groups:
-  - admin_g
-  - muzo_g
-  - poto_g
-  - saufy_g
-
 server_users:
-  - user: 'admin'
+  admin:
     group: 'admin_g'
     groups:
-      - "muzo_g"
-      - "poto_g"
-      - "saufy_g"
-    shell: /bin/false
-    password: admin
+      - 'muzo_g'
+      - 'poto_g'
+      - 'saufy_g'
+    shell: '/bin/false'
     access:
-      - http
-      - samba
-      - ftp
-  - user: muzo
-    group: muzo_g
+      - 'http'
+      - 'samba'
+      - 'ftp'
+  muzo:
+    group: 'muzo_g'
     groups:
-      - "poto_g"
-      - "saufy_g"
-    shell: /bin/bash
-    password: muzo
+      - 'poto_g'
+      - 'saufy_g'
+    shell: '/bin/bash'
     access:
-      - http
-      - samba
-      - ftp
-  - user: hannoerth
-    group: poto_g
-    shell: /bin/false
-    password: hannoerth
+      - 'http'
+      - 'samba'
+      - 'ftp'
+  hannoerth:
+    group: 'poto_g'
+    shell: '/bin/false'
     access:
-      - ftp
-  - user: saufy
-    group: saufy_g
-    shell: /bin/false
-    password: saufy
+      - 'ftp'
+    ftp_chroot: '/group_hannoerth_write_user_read_group_lan_no_password_disable_b/files'
+  saufy:
+    group: 'saufy_g'
+    shell: '/bin/false'
     access:
-      - http
-      - ftp
+      - 'http'
+      - 'ftp'

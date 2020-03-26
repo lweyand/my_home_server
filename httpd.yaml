@@ -19,8 +19,7 @@
     - restart httpd
 
 - name: Apache| Deploy base configuration
-  copy:
-#  template:
+  template:
     src: "templates/apache2/apache2.conf"
     dest: "/etc/apache2/apache2.conf"
     owner: "{{ apache_user }}"
@@ -103,6 +102,8 @@
     - restart httpd
 
 # Let's encrypt
+#  https://tech.feub.net/2017/11/creer-ou-renouveler-un-certificat-lets-encrypt-certbot-avec-la-methode-dns-challenge/
+#  https://linuq.org/auto-heber/certbot
 # https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-debian-9
 # https://wiki.debian.org/fr/LetsEncrypt
 # https://loige.co/using-lets-encrypt-and-certbot-to-automate-the-creation-of-certificates-for-openvpn/
@@ -113,6 +114,9 @@
   with_items:
     - certbot
     - python-certbot-apache
+
+# https://docs.ansible.com/ansible/latest/modules/acme_certificate_module.html
+  # https://www.digitalocean.com/community/tutorials/how-to-acquire-a-let-s-encrypt-certificate-using-ansible-on-ubuntu-18-04
 
 #  sudo certbot certonly \
 #  --standalone \
@@ -145,4 +149,3 @@
 #    secure backup of this folder now. This configuration directory will
 #    also contain certificates and private keys obtained by Certbot so
 #    making regular backups of this folder is ideal.
-

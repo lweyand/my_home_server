@@ -30,7 +30,6 @@
     dest: "/etc/proftpd/conf.d/{{ item.key }}.conf"
     owner: "{{ proftpd_user }}"
     group: "{{ proftpd_user }}"
-#  when: "'ftp' in item.value.services"
   loop: "{{ lookup('dict', spaces) }}"
   notify:
     - restart ftp

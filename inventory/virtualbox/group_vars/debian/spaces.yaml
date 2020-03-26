@@ -26,6 +26,8 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "no_access"
     exec_dynamic: "disable"
+    server_name: myserver.local
+    server_alias: ftp.myserver.local www.myserver.local
   write_user_read_group_noaccess_disable_b:
     group_short: wu_rg_na_b_b
     user: muzo

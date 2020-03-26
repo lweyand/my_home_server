@@ -49,11 +49,10 @@
 
 - name: Directories| Create users home dir
   file:
-    path: "{{ base_path }}/{{ users_dir }}/{{ item.user }}/home"
+    path: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
     state: directory
-    owner: "{{ item.user }}"
-    group: "{{ item.group }}"
+    owner: "{{ item.key }}"
+    group: "{{ item.value.group }}"
     mode: 0700
-  when: "'ftp' in item.access"
-  with_items:
-    - "{{ server_users }}"
+  when: "'ftp' in item.value.access"
+  loop: "{{ lookup('dict', server_users) }}"
