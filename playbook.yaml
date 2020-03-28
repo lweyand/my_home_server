@@ -9,14 +9,14 @@
       include: os.yaml
       tags:
         - os
-    - name: include directories tasks
-      include: directories.yaml
-      tags:
-        - os
     - name: include users tasks
       include: users.yaml
       tags:
         - users
+    - name: include directories tasks
+      include: directories.yaml
+      tags:
+        - os
     - name: include samba tasks
       include: samba.yaml
       tags:
@@ -43,3 +43,7 @@
       service:
         name: proftpd
         state: restarted
+    - name: restart sshd
+      service:
+        name: sshd
+        state: reloaded

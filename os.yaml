@@ -1,21 +1,36 @@
 ---
 
-- name: OS| install net-tools
+- name: OS| Install base packages
   apt:
-    name: net-tools
-    state: present
-- name: OS| install apt-transport-https
-  apt:
-    name: apt-transport-https
-    state: present
-- name: OS| install python-pip
-  apt:
-    name: python-pip
+    name: "{{ base_packages | join(',') }}"
     state: present
 
 - name: OS| Install python passlib
   pip:
     name: passlib
+
+- name: OS| configure sshd
+  template:
+    src: templates/ssh/sshd_config
+    dest: /etc/ssh/sshd_config
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart sshd
+
+- name: OS| configure rssh
+  copy:
+    src: files/rssh/rssh.conf
+    dest: /etc/rssh.conf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: OS| Add rssh to /etc/shells
+  lineinfile:
+    path: /etc/shells
+    line: '/usr/bin/rssh'
+    state: present
 
 - name: OS| Create base directory
   file:

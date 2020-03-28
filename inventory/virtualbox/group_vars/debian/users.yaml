@@ -7,7 +7,7 @@ server_users:
       - 'muzo_g'
       - 'poto_g'
       - 'saufy_g'
-    shell: '/bin/false'
+    shell: '/usr/bin/rssh'
     access:
       - 'http'
       - 'samba'
@@ -17,20 +17,20 @@ server_users:
     groups:
       - 'poto_g'
       - 'saufy_g'
-    shell: '/bin/bash'
+    shell: '/usr/bin/rssh'
     access:
       - 'http'
       - 'samba'
       - 'ftp'
   hannoerth:
     group: 'poto_g'
-    shell: '/bin/false'
+    shell: '/usr/bin/rssh'
     access:
       - 'ftp'
     ftp_chroot: '/group_hannoerth_write_user_read_group_lan_no_password_disable_b/files'
   saufy:
     group: 'saufy_g'
-    shell: '/bin/false'
+    shell: '/usr/bin/rssh'
     access:
       - 'http'
       - 'ftp'

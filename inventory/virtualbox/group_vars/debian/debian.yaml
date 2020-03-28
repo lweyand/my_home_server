@@ -6,3 +6,9 @@ users_dir: 'users'
 html_dir: 'www'
 cgi_dir: 'cgi-bin'
 ftp_dir: 'files'
+
+base_packages:
+  - net-tools
+  - apt-transport-https
+  - python-pip
+  - rssh

@@ -1,7 +1,18 @@
 ---
 
-proftpd_base_conf: /etc/proftpd/
-proftpd_user: root
-proftpd_group: root
+proftpd_base_conf: '/etc/proftpd/'
+proftpd_user: 'root'
+proftpd_group: 'root'
+proftpd_shared_group: 'shared'
 proftpd_packages:
-  - proftpd-basic
+  - 'proftpd-basic'
+
+# Firewall rule for gateway
+# public: LAN and internet acces
+# private: LAN access only
+proftpd_access: 'public'
+
+# Allow login from:
+# - LAN
+# - everywhere
+proftp_auth: 'everywhere'

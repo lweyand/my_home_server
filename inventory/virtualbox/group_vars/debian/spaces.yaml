@@ -143,7 +143,7 @@ spaces:
     group: muzo_g
     comment: "only_ftp_bay"
     file_sharing: "write_user_read_group"
-    web_access: "no_access"
+    web_access: "lan_with_password"
     exec_dynamic: "disable"
   samba_only_b:
     services:
@@ -163,6 +163,8 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "lan_with_password"
     exec_dynamic: "disable"
+    server_name: www.pouet.com
+    server_alias: test.pouet.com
   group_hannoerth_write_user_read_group_lan_no_password_disable_b:
     group_short: gh_wu_rg_lnp_d_b
     user: muzo

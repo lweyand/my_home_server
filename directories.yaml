@@ -38,21 +38,3 @@
     group: "{%if item.value.group is defined %}{{ item.value.group }}{%else%}www-data{%endif%}"
   when: "'ftp' in item.value.services or 'samba' in item.value.services"
   loop: "{{ lookup('dict', spaces) }}"
-
-- name: Directories| Create users dir
-  file:
-    path: "{{ base_path }}/{{ users_dir }}"
-    state: directory
-    owner: "root"
-    group: "root"
-    mode: 0755
-
-- name: Directories| Create users home dir
-  file:
-    path: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
-    state: directory
-    owner: "{{ item.key }}"
-    group: "{{ item.value.group }}"
-    mode: 0700
-  when: "'ftp' in item.value.access"
-  loop: "{{ lookup('dict', server_users) }}"

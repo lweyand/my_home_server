@@ -2,7 +2,7 @@
 
 - name: Users| Compute server_groups
   set_fact:
-    server_groups: "{{ server_users | dict2items | json_query(select_query) }}"
+    server_groups: "{{ server_users | dict2items | json_query(select_query) + [ proftpd_shared_group ] }}"
   vars:
     select_query: "[*].value.group"
 
@@ -13,32 +13,55 @@
   with_items:
     - "{{ server_groups }}"
 
+- name: Directories| Create users dir
+  file:
+    path: "{{ base_path }}/{{ users_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: 0755
+
 - name: Users| Compute users and passwords
   set_fact:
     server_users_psswds: "{{ server_users | combine(server_passwords, recursive=True)}}"
+
+- name: Directories| Create users home dir
+  file:
+    path: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
+    state: directory
+  when: "'ftp' in item.value.access"
+  loop: "{{ lookup('dict', server_users) }}"
 
 - name: Users| Create users
   user:
     name: "{{ item.key }}"
     group: "{{ item.value.group }}"
-    groups: "{% if item.value.groups is defined %}{{ item.value.groups | join(',') }}{% else %}{%endif%}"
+    groups: "{% if item.value.groups is defined %}{{ item.value.groups | join(',') + ',' + proftpd_shared_group }}{% else %}{{ proftpd_shared_group }}{%endif%}"
     shell: "{{ item.value.shell }}"
     password: "{{ item.value.password | password_hash('sha512', secret_salt) }}"
     home: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
+    create_home: no
     state: present
+    update_password: 'on_create'
+    append: no
   loop: "{{ lookup('dict', server_users_psswds ) }}"
 
+- name: Users| Set users home dir owners
+  file:
+    path: "{{ base_path }}/{{ users_dir }}/{{ item.key }}"
+    state: directory
+    owner: "{{ item.key }}"
+    group: "{{ item.value.group }}"
+    mode: 0700
+  when: "'ftp' in item.value.access"
+  loop: "{{ lookup('dict', server_users) }}"
+
 - name: Users| Update Apache Httpd user
-  # /etc/passwd
-  # www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
-  # /etc/group
-  # www-data:x:33:
-  # /etc/shadow
-  # www-data:*:17680:0:99999:7:::
   user:
     name: "{{ apache_user }}"
     group: "{{ apache_group }}"
     groups: "{{ server_groups | join(',') }}"
+    append: yes
     state: present
 
 - name: Users| Create spaces technical groups
@@ -51,8 +74,11 @@
   user:
     name: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
     group: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
+    groups: "{{ proftpd_shared_group }}"
     comment: "{% if item.value.comment is defined %}{{ item.value.comment }}{% else %}{%endif%}"
     shell: "/bin/false"
     home: "{{ base_path }}/{{ item.key }}"
+    create_home: no
+    password_lock: yes
     state: present
   loop: "{{ lookup('dict', spaces) }}"
