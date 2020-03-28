@@ -66,14 +66,14 @@
 
 - name: Users| Create spaces technical groups
   group:
-    name: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
+    name: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
     state: present
   loop: "{{ lookup('dict', spaces) }}"
 
 - name: Users| Create spaces technical users
   user:
-    name: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
-    group: "{%if item.value.group_short is defined %}{{ item.value.group_short }}{%else%}{{ item.key }}{%endif%}"
+    name: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
+    group: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
     groups: "{{ proftpd_shared_group }}"
     comment: "{% if item.value.comment is defined %}{{ item.value.comment }}{% else %}{%endif%}"
     shell: "/bin/false"

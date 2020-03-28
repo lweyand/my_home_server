@@ -29,7 +29,7 @@ spaces:
     server_name: myserver.local
     server_alias: ftp.myserver.local www.myserver.local
   write_user_read_group_noaccess_disable_b:
-    group_short: wu_rg_na_b_b
+    short_name: wu_rg_na_b_b
     user: muzo
     group: muzo_g
     comment: "write_user_read_group_noaccess_disable"
@@ -41,7 +41,7 @@ spaces:
     web_access: "no_access"
     exec_dynamic: "disable"
   write_group_read_all_noaccess_disable_b:
-    group_short: wg_ra_na_d_b
+    short_name: wg_ra_na_d_b
     user: muzo
     group: muzo_g
     comment: "write_group_read_all_noaccess_disable"
@@ -53,7 +53,7 @@ spaces:
     web_access: "no_access"
     exec_dynamic: "disable"
   write_group_read_group_noaccess_disable_b:
-    group_short: wg_rg_na_d_b
+    short_name: wg_rg_na_d_b
     user: muzo
     group: muzo_g
     comment: "write_group_read_group_noaccess_disable"
@@ -65,7 +65,7 @@ spaces:
     web_access: "no_access"
     exec_dynamic: "disable"
   write_user_read_group_all_internet_no_password_disable_b:
-    group_short: wu_rg_ainp_d_b
+    short_name: wu_rg_ainp_d_b
     user: muzo
     group: muzo_g
     comment: "write_user_read_group_all_internet_no_password_disable"
@@ -77,7 +77,7 @@ spaces:
     web_access: "all_internet_no_password"
     exec_dynamic: "disable"
   write_user_read_group_all_internet_with_password_disable_b:
-    group_short: wu_rg_aiwp_d_b
+    short_name: wu_rg_aiwp_d_b
     user: muzo
     group: muzo_g
     comment: "write_user_read_group_all_internet_with_password_disable"
@@ -89,7 +89,7 @@ spaces:
     web_access: "all_internet_with_password"
     exec_dynamic: "disable"
   write_user_read_group_all_internet_with_password_except_local_disable_b:
-    group_short: wu_rb_aiwpel_d_b
+    short_name: wu_rb_aiwpel_d_b
     user: muzo
     group: muzo_g
     comment: "write_user_read_group_all_internet_with_password_except_local_disable"
@@ -101,7 +101,7 @@ spaces:
     web_access: "all_internet_with_password_except_local"
     exec_dynamic: "disable"
   write_user_read_group_lan_no_password_disable_b:
-    group_short: wu_rg_lnp_d_b
+    short_name: wu_rg_lnp_d_b
     user: muzo
     group: muzo_g
     comment: "write_user_read_group_lan_no_password_disable"
@@ -113,7 +113,7 @@ spaces:
     web_access: "lan_no_password"
     exec_dynamic: "disable"
   write_user_read_group_lan_with_password_disable_b:
-    group_short: wu_rg_lwp_d_b
+    short_name: wu_rg_lwp_d_b
     services:
       - http
       - samba
@@ -125,7 +125,7 @@ spaces:
     web_access: "lan_with_password"
     exec_dynamic: "disable"
   write_user_read_group_noaccess_enable_b:
-    group_short: ur_rg_na_e_b
+    short_name: ur_rg_na_e_b
     services:
       - http
       - samba
@@ -166,7 +166,7 @@ spaces:
     server_name: www.pouet.com
     server_alias: test.pouet.com
   group_hannoerth_write_user_read_group_lan_no_password_disable_b:
-    group_short: gh_wu_rg_lnp_d_b
+    short_name: gh_wu_rg_lnp_d_b
     user: muzo
     group: poto_g
     comment: "group_hannoerth_write_user_read_group_lan_no_password_disable_b"
