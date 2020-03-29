@@ -28,7 +28,7 @@
     - name: include httpd tasks
       include: httpd.yaml
       tags:
-        - httpd
+        - http
 
   handlers:
     - name: restart samba

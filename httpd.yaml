@@ -25,6 +25,7 @@
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
     backup: yes
+    validate: 'apachectl -f /etc/apache2/apache2.conf'
   notify:
     - restart httpd
 

@@ -124,17 +124,17 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "lan_with_password"
     exec_dynamic: "disable"
-  write_user_read_group_noaccess_enable_b:
-    short_name: ur_rg_na_e_b
+  write_user_read_group_lan_no_password_enable_b:
+    short_name: ur_rg_lnp_e_b
     services:
       - http
       - samba
       - ftp
     user: muzo
     group: muzo_g
-    comment: "write_user_read_group_noaccess_disable"
+    comment: "write_user_read_group_lan_no_password_enable"
     file_sharing: "write_user_read_group"
-    web_access: "no_access"
+    web_access: "lan_no_password"
     exec_dynamic: "enable"
   ftp_only_b:
     services:
