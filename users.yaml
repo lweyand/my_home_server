@@ -2,9 +2,13 @@
 
 - name: Users| Compute server_groups
   set_fact:
-    server_groups: "{{ server_users | dict2items | json_query(select_query) + [ proftpd_shared_group ] }}"
+    server_groups: "{{ server_users | dict2items | json_query(select_groups) + [ proftpd_shared_group ] + ( server_users | dict2items | json_query(select_user_group) ) }}"
   vars:
-    select_query: "[*].value.group"
+    select_groups: "[*].value.groups | [0]"
+    select_user_group: "[*].key"
+
+- debug:
+    var: server_groups
 
 - name: Users| Create groups
   group:
@@ -29,15 +33,14 @@
   file:
     path: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
     state: directory
-  when: "'ftp' in item.value.access"
   loop: "{{ lookup('dict', server_users) }}"
 
 - name: Users| Create users
   user:
     name: "{{ item.key }}"
-    group: "{{ item.value.group }}"
+    group: "{{ item.key }}"
     groups: "{% if item.value.groups is defined %}{{ item.value.groups | join(',') + ',' + proftpd_shared_group }}{% else %}{{ proftpd_shared_group }}{%endif%}"
-    shell: "{{ item.value.shell }}"
+    shell: "{% if item.value.shell is defined %}{{ item.value.shell }}{% else %}/usr/bin/rssh{%endif%}"
     password: "{{ item.value.password | password_hash('sha512', secret_salt) }}"
     home: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
     create_home: no
@@ -51,9 +54,8 @@
     path: "{{ base_path }}/{{ users_dir }}/{{ item.key }}"
     state: directory
     owner: "{{ item.key }}"
-    group: "{{ item.value.group }}"
+    group: "{{ item.key }}"
     mode: 0700
-  when: "'ftp' in item.value.access"
   loop: "{{ lookup('dict', server_users) }}"
 
 - name: Users| Update Apache Httpd user

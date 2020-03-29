@@ -2,35 +2,21 @@
 
 server_users:
   admin:
-    group: 'admin_g'
+    groups:
+      - 'admin_g'
+      - 'muzo_g'
+      - 'poto_g'
+      - 'saufy_g'
+    shell: '/usr/bin/bash'
+  muzo:
     groups:
       - 'muzo_g'
       - 'poto_g'
       - 'saufy_g'
-    shell: '/usr/bin/rssh'
-    access:
-      - 'http'
-      - 'samba'
-      - 'ftp'
-  muzo:
-    group: 'muzo_g'
+  hannoerth:
     groups:
       - 'poto_g'
-      - 'saufy_g'
-    shell: '/usr/bin/rssh'
-    access:
-      - 'http'
-      - 'samba'
-      - 'ftp'
-  hannoerth:
-    group: 'poto_g'
-    shell: '/usr/bin/rssh'
-    access:
-      - 'ftp'
     ftp_chroot: '/group_hannoerth_write_user_read_group_lan_no_password_disable_b/files'
   saufy:
-    group: 'saufy_g'
-    shell: '/usr/bin/rssh'
-    access:
-      - 'http'
-      - 'ftp'
+    groups:
+      - 'saufy_g'
