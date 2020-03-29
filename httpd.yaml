@@ -9,6 +9,14 @@
 # /etc/php5/cgi/php.ini=Configuration for scripts run via CGI
 # /etc/php/7.0/cli/php.ini=Configuration for command-line scripts
 
+- name: Apache| Configure php
+  copy:
+    src: files/php/apache2/php.ini
+    dest: /etc/php/7.0/apache2/php.ini
+    mode: 0644
+    owner: root
+    group: root
+
 - name: Apache| Deploy config
   template:
     src: "templates/apache2/apache2.conf"
