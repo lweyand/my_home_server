@@ -17,6 +17,7 @@
       include: directories.yaml
       tags:
         - os
+        - dir
     - name: include samba tasks
       include: samba.yaml
       tags:

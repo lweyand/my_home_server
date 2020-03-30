@@ -62,21 +62,38 @@
     dest: "/etc/apache2/sites-available/{{ item.key }}.conf"
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
-  when: "'http' in item.value.services and 'no_access' != item.value.web_access"
+  when: "'http' in item.value.services and 'no_access' != item.value.web_access and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
   notify:
     - restart httpd
+
+- name: Apache| Delete virtual hosts Configuration
+  file:
+    dest: "/etc/apache2/sites-available/{{ item.key }}.conf"
+    state: absent
+  when: "'http' in item.value.services and 'no_access' != item.value.web_access and 'absent' == item.value.state"
+  loop: "{{ lookup('dict', spaces) }}"
+  notify:
+    - restart httpd
+
 - name: Apache| Create symlink to activate
   file:
     src: "/etc/apache2/sites-available/{{ item.key }}.conf"
-    dest: "/etc/apache2/sites-enabled/{{ '%03d' | format(my_idx) }}-{{ item.key }}.conf"
+    dest: "/etc/apache2/sites-enabled/{{ item.key }}.conf"
     state: link
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
-  when: "'http' in item.value.services and 'no_access' != item.value.web_access"
+  when: "'http' in item.value.services and 'no_access' != item.value.web_access and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
-  loop_control:
-    index_var: my_idx
+  notify:
+    - restart httpd
+
+- name: Apache| Delete symlink to disable
+  file:
+    dest: "/etc/apache2/sites-enabled/{{ item.key }}.conf"
+    state: absent
+  when: "'http' in item.value.services and 'no_access' != item.value.web_access and 'absent' == item.value.state"
+  loop: "{{ lookup('dict', spaces) }}"
   notify:
     - restart httpd
 
@@ -95,7 +112,7 @@
     dest: "{{ base_path }}/{{ item.key }}/{{ html_dir }}/index.html"
     owner: "{{ item.value.user }}"
     group: "{{ item.value.group }}"
-  when: "'http' in item.value.services"
+  when: "'http' in item.value.services and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
   notify:
     - restart httpd
@@ -105,7 +122,7 @@
     dest: "{{ base_path }}/{{ item.key }}/{{ html_dir }}/index.php"
     owner: "{{ item.value.user }}"
     group: "{{ item.value.group }}"
-  when: "'http' in item.value.services"
+  when: "'http' in item.value.services and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
   notify:
     - restart httpd

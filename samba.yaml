@@ -24,10 +24,10 @@
   notify:
     - restart samba
 - name: Samba| Delete samba users
-  shell: "smbpasswd -x {{ item }}"
-  register: smbpasswddel
-  changed_when: "'Deleted user' in smbpasswddel.stdout"
-  failed_when: "smbpasswddel.rc > 1 or ( smbpasswddel.rc == 1 and 'Failed to find entry for user' not in smbpasswddel.stderr )"
+  shell: "pdbedit -x {{ item }}"
+  register: pdbedit
+  changed_when: "'Deleted user' in pdbedit.stdout"
+  failed_when: "(pdbedit.rc > 1 and pdbedit.rc != 255) or (( pdbedit.rc == 1 and 'Failed to find entry for user' not in pdbedit.stderr ) or ( pdbedit.rc == 255 and 'does not exist in the passdb' not in pdbedit.stderr ))"
   loop: "{{ spaces_users }}"
   when: "server_users_psswds | dict2items | json_query(select_query) | json_query(get_query) | first is defined"
   vars:
@@ -53,7 +53,7 @@
     block: "{{ lookup('template', 'templates/samba/directory.conf') }}"
     marker: "; {mark} ANSIBLE MANAGED BLOCK FOR {{ item.key }}"
     validate: 'testparm -s %s'
-  when: "'samba' in item.value.services"
+  when: "'samba' in item.value.services and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
   notify:
     - restart samba

@@ -28,6 +28,7 @@ spaces:
     exec_dynamic: "disable"
     server_name: myserver.local
     server_alias: ftp.myserver.local www.myserver.local
+    state: present
   write_user_read_group_noaccess_disable_b:
     short_name: wu_rg_na_b_b
     user: muzo
@@ -40,6 +41,7 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "no_access"
     exec_dynamic: "disable"
+    state: present
   write_group_read_all_noaccess_disable_b:
     short_name: wg_ra_na_d_b
     user: muzo
@@ -52,6 +54,7 @@ spaces:
     file_sharing: "write_group_read_all"
     web_access: "no_access"
     exec_dynamic: "disable"
+    state: present
   write_group_read_group_noaccess_disable_b:
     short_name: wg_rg_na_d_b
     user: muzo
@@ -64,6 +67,7 @@ spaces:
     file_sharing: "write_group_read_group"
     web_access: "no_access"
     exec_dynamic: "disable"
+    state: present
   write_user_read_group_all_internet_no_password_disable_b:
     short_name: wu_rg_ainp_d_b
     user: muzo
@@ -76,6 +80,7 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "all_internet_no_password"
     exec_dynamic: "disable"
+    state: present
   write_user_read_group_all_internet_with_password_disable_b:
     short_name: wu_rg_aiwp_d_b
     user: muzo
@@ -88,6 +93,7 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "all_internet_with_password"
     exec_dynamic: "disable"
+    state: present
   write_user_read_group_all_internet_with_password_except_local_disable_b:
     short_name: wu_rb_aiwpel_d_b
     user: muzo
@@ -100,6 +106,7 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "all_internet_with_password_except_local"
     exec_dynamic: "disable"
+    state: present
   write_user_read_group_lan_no_password_disable_b:
     short_name: wu_rg_lnp_d_b
     user: muzo
@@ -112,6 +119,7 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "lan_no_password"
     exec_dynamic: "disable"
+    state: present
   write_user_read_group_lan_with_password_disable_b:
     short_name: wu_rg_lwp_d_b
     services:
@@ -124,6 +132,7 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "lan_with_password"
     exec_dynamic: "disable"
+    state: present
   write_user_read_group_lan_no_password_enable_b:
     short_name: ur_rg_lnp_e_b
     services:
@@ -136,6 +145,7 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "lan_no_password"
     exec_dynamic: "enable"
+    state: present
   ftp_only_b:
     services:
       - ftp
@@ -145,6 +155,7 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "lan_with_password"
     exec_dynamic: "disable"
+    state: present
   samba_only_b:
     services:
       - samba
@@ -154,6 +165,7 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "no_access"
     exec_dynamic: "disable"
+    state: present
   http_only_b:
     services:
       - http
@@ -165,6 +177,7 @@ spaces:
     exec_dynamic: "disable"
     server_name: www.pouet.com
     server_alias: test.pouet.com
+    state: present
   group_hannoerth_write_user_read_group_lan_no_password_disable_b:
     short_name: gh_wu_rg_lnp_d_b
     user: muzo
@@ -177,3 +190,17 @@ spaces:
     file_sharing: "write_user_read_group"
     web_access: "lan_no_password"
     exec_dynamic: "disable"
+    state: present
+
+  test:
+    user: toto
+    group: toto_g
+    comment: "test"
+    services:
+      - http
+      - samba
+      - ftp
+    file_sharing: "write_user_read_group"
+    web_access: "lan_no_password"
+    exec_dynamic: "disable"
+    state: absent

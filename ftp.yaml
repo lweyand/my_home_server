@@ -5,15 +5,6 @@
     name: "{{ proftpd_packages | join(',') }}"
     state: present
 
-- name: Proftpd| Deploy default file
-  template:
-    src: "templates/tests/proftpd/file.txt"
-    dest: "{{ base_path }}/{{ item.key }}/{{ ftp_dir }}/{{ item.key }}.txt"
-    owner: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
-    group: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
-  when: "'ftp' in item.value.services"
-  loop: "{{ lookup('dict', spaces) }}"
-
 - name: Proftpd| Deploy base configuration
   template:
     src: 'templates/proftpd/proftpd.conf'
@@ -24,12 +15,31 @@
   notify:
     - restart ftp
 
-- name: Proftpd| Deploy directory Configuration
+- name: Proftpd| Deploy space Configuration
   template:
     src: "templates/proftpd/space-directory.conf"
     dest: "/etc/proftpd/conf.d/{{ item.key }}.conf"
     owner: "{{ proftpd_user }}"
     group: "{{ proftpd_user }}"
   loop: "{{ lookup('dict', spaces) }}"
+  when: "'present' == item.value.state"
   notify:
     - restart ftp
+
+- name: Proftpd| Delete space Configuration
+  file:
+    path: "/etc/proftpd/conf.d/{{ item.key }}.conf"
+    state: absent
+  loop: "{{ lookup('dict', spaces) }}"
+  when: "'absent' == item.value.state"
+  notify:
+    - restart ftp
+
+- name: Proftpd| Deploy default file
+  template:
+    src: "templates/tests/proftpd/file.txt"
+    dest: "{{ base_path }}/{{ item.key }}/{{ ftp_dir }}/{{ item.key }}.txt"
+    owner: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
+    group: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
+  when: "'ftp' in item.value.services and 'present' == item.value.state"
+  loop: "{{ lookup('dict', spaces) }}"

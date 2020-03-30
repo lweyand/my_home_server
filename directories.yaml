@@ -1,14 +1,13 @@
 ---
 
-- name: Directories| Create spaces directory
+- name: Directories| Create or delete spaces directory
   file:
     path: "{{ base_path }}/{{ item.key }}"
-    state: directory
+    state: "{% if 'absent' == item.value.state %}absent{% else %}directory{% endif %}"
     mode: "00755"
     owner: 'root'
     group: 'root'
   loop: "{{ lookup('dict', spaces) }}"
-
 - name: Directories| Create apache directory html
   file:
     path: "{{ base_path }}/{{ item.key }}/{{ html_dir }}"
@@ -16,9 +15,8 @@
     mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
     owner: "{% if 'write_user_read_group' == item.value.file_sharing %}{{ item.value.user }}{% else %}www-data{% endif %}"
     group: "{{ item.value.group }}"
-  when: "'http' in item.value.services"
+  when: "'http' in item.value.services and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
-
 - name: Directories| Create apache directory cgi
   file:
     path: "{{ base_path }}/{{ item.key }}/{{ cgi_dir }}"
@@ -26,9 +24,8 @@
     mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
     owner: "{% if 'write_user_read_group' == item.value.file_sharing %}{{ item.value.user }}{% else %}www-data{% endif %}"
     group: "{{ item.value.group }}"
-  when: "'http' in item.value.services"
+  when: "'http' in item.value.services and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
-
 - name: Directories| Create ftp/samba directory files
   file:
     path: "{{ base_path }}/{{ item.key }}/{{ ftp_dir }}"
@@ -36,5 +33,5 @@
     mode: "{% if 'write_group_read_all' == item.value.file_sharing %}02775{% elif 'write_group_read_group' == item.value.file_sharing %}02770{% else %}02750{% endif %}"
     owner: "{%if item.value.user is defined %}{{ item.value.user }}{%else%}admin{%endif%}"
     group: "{%if item.value.group is defined %}{{ item.value.group }}{%else%}www-data{%endif%}"
-  when: "'ftp' in item.value.services or 'samba' in item.value.services"
+  when: "('ftp' in item.value.services or 'samba' in item.value.services) and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"

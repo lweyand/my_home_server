@@ -78,13 +78,14 @@
     append: yes
     state: present
 
-- name: Users| Create spaces technical groups
+- name: Users| Create spaces technical primary groups
   group:
     name: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
     state: present
   loop: "{{ lookup('dict', spaces) }}"
+  when: "'present' == item.value.state"
 
-- name: Users| Create spaces technical users
+- name: Users| Create or delete spaces technical users
   user:
     name: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
     group: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
@@ -94,5 +95,12 @@
     home: "{{ base_path }}/{{ item.key }}"
     create_home: no
     password_lock: yes
-    state: present
+    state: "{{ item.value.state }}"
   loop: "{{ lookup('dict', spaces) }}"
+
+- name: Users| Delete spaces technical primary groups
+  group:
+    name: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
+    state: absent
+  loop: "{{ lookup('dict', spaces) }}"
+  when: "'absent' == item.value.state"
