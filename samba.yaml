@@ -5,15 +5,34 @@
     name: "{{ samba_packages | join(',') }}"
     state: present
 
+- name: Samba| Compute space users
+  set_fact:
+    server_users_psswds: "{{ server_users | combine(server_passwords, recursive=True)}}"
+    spaces_users: "{{ spaces  | dict2items | json_query(user_space_query) | unique}}"
+  vars:
+    user_space_query: "[?value.user != '{{ apache_user }}'].value.user"
+
 - name: Samba| Create samba users
-  shell: "printf '{{ server_passwords | dict2items | json_query(select_query) | json_query(get_query) | first }}\n{{ server_passwords | dict2items | json_query(select_query) | json_query(get_query) | first }}\n' | smbpasswd -s -a {{ item.value.user }}"
+  shell: "printf '{{ server_users_psswds | dict2items | json_query(select_query) | json_query(get_query) | first }}\n{{ server_users_psswds | dict2items | json_query(select_query) | json_query(get_query) | first }}\n' | smbpasswd -s -a {{ item }}"
   register: smbpasswd
   changed_when: "'Added user' in smbpasswd.stdout"
-  when: "'samba' in item.value.services"
-  loop: "{{ lookup('dict', spaces) }}"
+  loop: "{{ spaces_users }}"
+  when: "server_users_psswds | dict2items | json_query(select_query) | json_query(get_query) | first is defined"
   vars:
-    select_query: "[?key=='{{ item.value.user }}']"
-    get_query: "[*].value.password"
+    select_query: "[?key=='{{ item }}']"
+    get_query: "[?value.state == 'present'].value.password"
+  notify:
+    - restart samba
+- name: Samba| Delete samba users
+  shell: "smbpasswd -x {{ item }}"
+  register: smbpasswddel
+  changed_when: "'Deleted user' in smbpasswddel.stdout"
+  failed_when: "smbpasswddel.rc > 1 or ( smbpasswddel.rc == 1 and 'Failed to find entry for user' not in smbpasswddel.stderr )"
+  loop: "{{ spaces_users }}"
+  when: "server_users_psswds | dict2items | json_query(select_query) | json_query(get_query) | first is defined"
+  vars:
+    select_query: "[?key=='{{ item }}']"
+    get_query: "[?value.state == 'absent'].value.password"
   notify:
     - restart samba
 

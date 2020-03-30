@@ -1,21 +1,25 @@
 ---
 
-- name: Users| Compute server_groups
+- name: Users| Compute server_groups_present & server_primary_groups_absent
   set_fact:
-    server_groups: "{{ server_users | dict2items | json_query(select_groups) + [ proftpd_shared_group ] + ( server_users | dict2items | json_query(select_user_group) ) }}"
+    server_groups_present: "{{ server_users | dict2items | json_query(select_groups_present) | flatten | unique + [ proftpd_shared_group ] }}"
+    server_primary_groups_absent: "{{ server_users | dict2items | json_query(select_groups_absent) | flatten | unique }}"
   vars:
-    select_groups: "[*].value.groups | [0]"
-    select_user_group: "[*].key"
+    select_groups_present: "[?value.state == 'present'].[key, value.groups]"
+    select_groups_absent: "[?value.state == 'absent'].[key]"
 
 - debug:
-    var: server_groups
+    var: server_groups_present
+
+- debug:
+    var: server_primary_groups_absent
 
 - name: Users| Create groups
   group:
     name: "{{ item }}"
     state: present
   with_items:
-    - "{{ server_groups }}"
+    - "{{ server_groups_present }}"
 
 - name: Directories| Create users dir
   file:
@@ -29,13 +33,13 @@
   set_fact:
     server_users_psswds: "{{ server_users | combine(server_passwords, recursive=True)}}"
 
-- name: Directories| Create users home dir
+- name: Users| Create or delete users home dir
   file:
     path: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
-    state: directory
+    state: "{% if 'absent' == item.value.state %}absent{% else %}directory{% endif %}"
   loop: "{{ lookup('dict', server_users) }}"
 
-- name: Users| Create users
+- name: Users| Create or delete users
   user:
     name: "{{ item.key }}"
     group: "{{ item.key }}"
@@ -44,25 +48,33 @@
     password: "{{ item.value.password | password_hash('sha512', secret_salt) }}"
     home: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
     create_home: no
-    state: present
+    state: "{{ item.value.state }}"
     update_password: 'on_create'
     append: no
   loop: "{{ lookup('dict', server_users_psswds ) }}"
 
+- name: Users| Delete users primary groups
+  group:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ server_primary_groups_absent }}"
+
 - name: Users| Set users home dir owners
   file:
     path: "{{ base_path }}/{{ users_dir }}/{{ item.key }}"
-    state: directory
+    state: 'directory'
     owner: "{{ item.key }}"
     group: "{{ item.key }}"
     mode: 0700
   loop: "{{ lookup('dict', server_users) }}"
+  when: "'present' == item.value.state"
 
 - name: Users| Update Apache Httpd user
   user:
     name: "{{ apache_user }}"
     group: "{{ apache_group }}"
-    groups: "{{ server_groups | join(',') }}"
+    groups: "{{ server_groups_present | join(',') }}"
     append: yes
     state: present
 
