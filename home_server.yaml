@@ -6,28 +6,28 @@
 
   tasks:
     - name: include os tasks
-      include: os.yaml
+      include: includes/os.yaml
       tags:
         - os
     - name: include users tasks
-      include: users.yaml
+      include: includes/users.yaml
       tags:
         - users
     - name: include directories tasks
-      include: directories.yaml
+      include: includes/directories.yaml
       tags:
         - os
         - dir
     - name: include samba tasks
-      include: samba.yaml
+      include: includes/samba.yaml
       tags:
         - samba
     - name: include ftp tasks
-      include: ftp.yaml
+      include: includes/ftp.yaml
       tags:
         - ftp
     - name: include httpd tasks
-      include: httpd.yaml
+      include: includes/http.yaml
       tags:
         - http
 
