@@ -1,0 +1,105 @@
+*mangle
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+{% for port in [21, 80, 443] %}
+--append OUTPUT --protocol tcp --dport {{ port }} --jump TOS --set-tos Minimize-Delay
+{% endfor %}
+COMMIT
+
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+:rejectedLog - [0:0]
+:state_chk - [0:0]
+:local_chk - [0:0]
+:InboundICMP - [0:0]
+:InboundTCP - [0:0]
+:InboundUDP - [0:0]
+:SSH_Autoblock - [0:0]
+
+# Allow established or new connections
+--append state_chk --match state --state ESTABLISHED,RELATED --jump ACCEPT
+--append INPUT --jump state_chk
+--append FORWARD --jump state_chk
+
+# Allow Local traffic
+--append local_chk ! --in-interface {{ exter_ip }} --jump ACCEPT
+--append INPUT --jump local_chk
+--append FORWARD --jump local_chk
+
+# Deny multicast
+--append INPUT --source 224.0.0.0/4 --jump rejectedLog
+--append INPUT --destination 224.0.0.0/4 --jump rejectedLog
+--append OUTPUT --source 224.0.0.0/4 --jump rejectedLog
+--append OUTPUT --destination 224.0.0.0/4 --jump rejectedLog
+
+# Allow DHCP
+#--append INPUT --policy udp --dport 67:68 -i {-- { inter_ip } --} --jump ACCEPT
+
+# Check ICMP INPUT
+--append INPUT --protocol icmp --jump InboundICMP
+--append INPUT --protocol icmp --jump rejectedLog
+--append InboundICMP --protocol icmp --jump rejectedLog
+--append INPUT --jump rejectedLog
+
+# Check UDP Input
+ --append INPUT --protocol udp --in-interface {{ exter_ip }} --jump InboundUDP
+ --append INPUT --protocol udp --in-interface {{ exter_ip }} --jump rejectedLog
+ --append InboundUDP --protocol udp --jump rejectedLog
+
+# Create SSH Autoblock
+--append SSH_Autoblock --match recent --set --name SSH
+--append SSH_Autoblock --match recent --rcheck --rttl --seconds 900 --hitcount 4 --name SSH --jump rejectedLog
+
+# Filter TCP Input
+--append INPUT --protocol tcp --syn --jump InboundTCP
+--append INPUT --protocol tcp --syn --jump rejectedLog
+{% if firewall.closed_tcp_ports | length > 0 %}
+{% for port in firewall.closed_tcp_ports %}
+--append InboundTCP --protocol tcp --destination {{ exter_ip }} --dport {{ port }} --src 0.0.0.0/0 --jump DROP
+{% endfor %}
+{% endif %}
+{% for port in firewall.opened_tcp_ports %}
+--append InboundTCP --protocol tcp --destination {{ exter_ip }} --dport {{ port }} --src 0.0.0.0/0 --jump ACCEPT
+{% endfor %}
+
+# Filter UDP Input
+{% if firewall.closed_udp_ports | length > 0 %}
+{% for port in firewall.closed_udp_ports %}
+--append InboundUDP --protocol udp --destination {{ exter_ip }} --dport {{ port }} --src 0.0.0.0/0 --jump DROP
+{% endfor %}
+{% endif %}
+{% for port in firewall.opened_udp_ports %}
+--append InboundUDP --protocol udp --destination {{ exter_ip }} --dport {{ port }} --src 0.0.0.0/0 --jump ACCEPT
+{% endfor %}
+
+# Filter ICMP Input
+--append InboundICMP --protocol icmp --icmp-type echo-request --jump ACCEPT
+--append InboundICMP --protocol icmp --icmp-type echo-reply --jump ACCEPT
+--append InboundICMP --protocol icmp --icmp-type destination-unreachable --jump ACCEPT
+--append InboundICMP --protocol icmp --icmp-type source-quench --jump ACCEPT
+--append InboundICMP --protocol icmp --icmp-type time-exceeded --jump ACCEPT
+--append InboundICMP --protocol icmp --icmp-type parameter-problem --jump ACCEPT
+
+# Policy Forward
+--policy FORWARD DROP
+--append FORWARD --jump rejectedLog
+
+# Policy Input
+--policy INPUT DROP
+--append INPUT --jump rejectedLog
+
+# Policy Output
+--policy OUTPUT ACCEPT
+--append OUTPUT --jump ACCEPT
+
+# Adjust Log
+--append rejectedLog --jump LOG --log-prefix="[rejected] "
+--append rejectedLog --jump DROP
+
+COMMIT
+# Completed on Fri Mar 20 19:24:19 2020

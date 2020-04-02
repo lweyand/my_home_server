@@ -18,10 +18,14 @@
       tags:
         - os
         - dir
+    - name: include firewall tasks
+      include:  includes/firewall.yaml
+      tags:
+        - frwl
     - name: include samba tasks
       include: includes/samba.yaml
       tags:
-        - samba
+        - smb
     - name: include ftp tasks
       include: includes/ftp.yaml
       tags:
@@ -48,3 +52,10 @@
       service:
         name: sshd
         state: reloaded
+    - name: restart iptables
+      command: service netfilter-persistent reload
+#        warn: false
+      register: iptables
+#      command_warnings: False
+      changed_when: "iptables.rc == 0"
+      failed_when: "iptables.rc > 0"
