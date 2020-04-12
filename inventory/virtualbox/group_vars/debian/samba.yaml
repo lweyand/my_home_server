@@ -1,6 +1,12 @@
+---
+
+# Samba base path
 samba_root: "{{ base_path }}"
+# Samba workgroup
 samba_workgroup: "BUTTERFLYEFFECT"
+# Server netbios name
 samba_netbios_name: "server_test"
+# Samba packages to instal
 samba_packages:
   - attr
   - libaio1

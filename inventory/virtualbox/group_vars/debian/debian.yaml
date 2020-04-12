@@ -1,12 +1,18 @@
 ---
 
+# spaces base path
 base_path: '/home/srv'
 
+# space users dir
 users_dir: 'users'
+# http server files dir for a space
 html_dir: 'www'
+# http server cgi dir for a space
 cgi_dir: 'cgi-bin'
+# ftp and samba files dir for a space
 ftp_dir: 'files'
 
+# OS base packages to install
 base_packages:
   - net-tools
   - apt-transport-https
@@ -15,6 +21,19 @@ base_packages:
   - iptables-persistent
   - netfilter-persistent
 
+# Iptable configuration
+# file: rule file name
+# minimize_delay: list of ports to minimize delay in mangle table
+# opened_tcp_ports: list of tcp ports to open (default all is closed)
+#   syntax for a single port (ftp):
+#      - '21'
+#   syntax for a port range:
+#      - '8080:8085'
+# opened_udp_ports: list of udp ports to open (default all is closed)
+#   syntax for a single port (ftp):
+#      - '21'
+#   syntax for a port range:
+#      - '137:138'
 firewall:
   file: '/etc/iptables/rules.v4'
   minimize_delay:

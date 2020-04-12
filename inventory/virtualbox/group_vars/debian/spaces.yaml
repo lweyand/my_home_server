@@ -1,21 +1,34 @@
 ---
 
-#Droits d'accès sur les espaces:
-#  - file_sharing: Accès authentifié par le partage de fichiers ou le protocole FTP: impact samba, ftp
-#      - write_user_read_group: Écriture=Admin, Lecture=Groupe
-#      - write_group_read_all: Écriture=Groupe, Lecture=Tous
-#      - write_group_read_group: Écriture=Groupe, Lecture=Groupe
-#  - web_access: Accès public par le Web ou le protocole FTP anonyme: impact http, ftp
-#      - all_internet_no_password: Tout Internet (aucun mot de passe requis)Réseau local (aucun mot de passe requis)
-#      - all_internet_with_password: Tout Internet (mot de passe requis)
-#      - all_internet_with_password_except_local: Tout Internet (mot de passe requis en dehors des réseaux locaux)
-#      - lan_no_password: Réseau local (aucun mot de passe requis)
-#      - lan_with_password: Réseau local (mot de passe requis)
-#      - no_access: Aucun accès
-#  - exec_dynamic: Exécution de contenu dynamique (CGI, PHP, SSI): impact http
-#      - disable: Désactivé
-#      - enable: Activé
-
+# Spaces configuration, and access rights
+# primary: default space, do not delete, but configure it as you need.
+# <space name>: space name
+#   short_name: if your space name is too long (user space name creation will throw an error), set a short name value.
+#   user: user master of this space (see file_sharing)
+#   group: group allowed to use this space (see file_sharing)
+#   comment: explanation of the space
+#   services: list of services enabled for this space. Values: [http, samba, ftp]
+#   file_sharing: Autheticated access for file sharing or FTP (samba, ftp):
+#      - write_user_read_group: Write=user, Read=Group
+#      - write_group_read_all: Write=Group, Read=All
+#      - write_group_read_group: Write=Group, Read=Group
+#   web_access: Public acces for web or Anonymous FTP (http, ftp)
+#      - all_internet_no_password: All Internet with no password required, local network with no password required
+#      - all_internet_with_password: All internet with password required, local network with password required
+#      - all_internet_with_password_except_local: All internet (password required outside local network)
+#      - lan_no_password: Local network only with no password required)
+#      - lan_with_password: Local network only with password required
+#      - no_access: No web (http or ftp) access
+#   exec_dynamic: Dynamic content execution (CGI, PHP, SSI)
+#      - disable: dynamic content execution disabled
+#      - enable: dynamic content execution enabled
+#
+# Http specific configurations:
+#   server_name: virtualhost server name
+#   server_alias: virtualhost alias names
+#   server_cert_base_path: enable ssl by specify letsencrypt certificate dir path.
+#     By default, set it to: "{{ letsencrypt_cert_path }}/{{ letsencrypt_root_cn }}"
+#     Ex: server_cert_base_path: "{{ letsencrypt_cert_path }}/{{ letsencrypt_root_cn }}"
 spaces:
   primary:
     user: "{{ apache_user }}"

@@ -1,15 +1,20 @@
 ---
 
+# proftpd configuration base path
 proftpd_base_conf: '/etc/proftpd/'
+# proftpd user and group
 proftpd_user: 'root'
 proftpd_group: 'root'
+# proftpd shared group name
 proftpd_shared_group: 'shared'
+# proftpd packages to install
 proftpd_packages:
   - 'proftpd-basic'
 
 # Firewall rule for gateway
 # public: LAN and internet acces
 # private: LAN access only
+# NOT USED
 proftpd_access: 'public'
 
 # Allow login from:

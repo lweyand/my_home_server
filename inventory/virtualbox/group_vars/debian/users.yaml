@@ -1,5 +1,14 @@
 ---
 
+# Users configurations
+# <username>: user account name
+#   groups:
+#     - <List of secondary user's groups>
+#   shell: <connection shell> default: rssh
+#   ftp_chroot: dir where account is jailed when connected on ftp server
+#   state:
+#     - present: the account is created
+#     - absent: the account is deleted
 server_users:
   admin:
     groups:

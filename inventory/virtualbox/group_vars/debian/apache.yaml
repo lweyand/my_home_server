@@ -1,7 +1,9 @@
 ---
 
+# Apache user and group
 apache_user: 'www-data'
 apache_group: 'www-data'
+# Apache httpd packages to install
 httpd_packages:
   - apache2
   - php7.0
@@ -16,6 +18,7 @@ httpd_packages:
   - libapache2-mod-authnz-external
   - pwauth
 
+# Enable apache modules
 httpd_modules:
   - auth_basic
   - authnz_external
