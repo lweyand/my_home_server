@@ -1,0 +1,68 @@
+---
+
+# Let's encrypt
+- name: Certbot| Install certbot
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - certbot
+
+- name: Certbot| Create dir {{ letsencrypt_hook_path }}
+  file:
+    path: "{{ letsencrypt_hook_path }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: Certbot| Deploy authenticator script
+  template:
+    src: "{{ letsencrypt_hook_template }}"
+    dest: "{{ letsencrypt_hook_path }}/{{ letsencrypt_hook_name }}"
+    owner: root
+    group: root
+    mode: '0744'
+  register: deploy_auth_script
+
+- name: Certbot| Compute all server names
+  set_fact:
+    tls_domain_names: "{{ [ letsencrypt_root_cn ] + (spaces  | dict2items | json_query(dns_query) | unique ) }}"
+  vars:
+    dns_query: "[?value.server_cert_base_path != null].value.server_name"
+
+- name: Certbot| Deploy certbot services
+  template:
+    src: "templates/certbot/{{ item }}"
+    dest: "/lib/systemd/system/{{ item }}"
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  register: certbot_services
+  loop:
+    - 'certbot.service'
+    - 'certbot.timer'
+
+- name: Certbot| Systemctl reload
+  command: systemctl daemon-reload
+  register: demon_reload
+  failed_when: "demon_reload.rc > 0"
+  changed_when: "demon_reload.rc == 0"
+  when: "certbot_services.changed == true or deploy_auth_script.changed == true"
+- name: Certbot| Systemctl enable
+  command: systemctl enable {{ item }}
+  register: demon_enable
+  failed_when: "demon_enable.rc > 0"
+  changed_when: "demon_enable.rc == 0"
+  when: "certbot_services.changed == true or deploy_auth_script.changed == true"
+  loop:
+    - 'certbot.service'
+    - 'certbot.timer'
+- name: Certbot| Systemctl start and create certificates
+  command: systemctl start {{ item }}
+  register: demon_start
+  failed_when: "demon_start.rc > 0"
+  changed_when: "demon_start.rc == 0"
+  when: "certbot_services.changed == true or deploy_auth_script.changed == true"
+  loop:
+    - 'certbot.service'
+    - 'certbot.timer'

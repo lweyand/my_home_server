@@ -1,0 +1,9 @@
+[Unit]
+Description=Certbot
+Documentation=file:///usr/share/doc/python-certbot-doc/html/index.html
+Documentation=https://letsencrypt.readthedocs.io/en/latest/
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/certbot {% if letsencrypt_test %}--test-cert {% endif %}--text --agree-tos --email {{ letsencrypt_email }} --cert-name {{ letsencrypt_root_cn }} -d {{ tls_domain_names | join(',') }} --manual --preferred-challenges dns --expand --keep-until-expiring --manual-public-ip-logging-ok --manual-auth-hook "{{ letsencrypt_hook_path }}/{{ letsencrypt_hook_name }} add" --manual-cleanup-hook "{{ letsencrypt_hook_path }}/{{ letsencrypt_hook_name }} del" certonly
+PrivateTmp=true

@@ -30,6 +30,10 @@
       include: includes/ftp.yaml
       tags:
         - ftp
+    - name: include certbot tasks
+      include: includes/certbot.yaml
+      tags:
+        - crt
     - name: include httpd tasks
       include: includes/http.yaml
       tags:

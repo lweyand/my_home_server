@@ -1,0 +1,13 @@
+---
+
+letsencrypt_test: true
+# set the certificate CN
+letsencrypt_root_cn: '< YOUR ROOT CN >'
+# letsencrypt paths
+letsencrypt_basepath: '/etc/letsencrypt'
+letsencrypt_cert_path: "{{ letsencrypt_basepath }}/live"
+letsencrypt_hook_path: "{{ letsencrypt_basepath }}/renewal-hooks"
+letsencrypt_hook_name: 'authenticator.sh'
+letsencrypt_hook_template: 'templates/certbot/bookmyname-authenticator.sh'
+letsencrypt_email: '< YOUR EMAIL HERE >'
+letsencrypt_renew_timer: '*-*-* 00,12:00:00'
