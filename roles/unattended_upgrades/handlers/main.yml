@@ -1,0 +1,12 @@
+---
+
+- name: restart apt-daily.timer
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: apt-daily.timer
+- name: restart service apt-daily-upgrade.timer
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: apt-daily-upgrade.timer

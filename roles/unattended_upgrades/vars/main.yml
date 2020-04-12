@@ -1,0 +1,5 @@
+---
+
+uau_packages:
+  - unattended-upgrades
+  - apt-listchanges

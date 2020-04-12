@@ -35,3 +35,8 @@
         name: apache
       tags:
         - http
+    - name: import unattended upgrades
+      import_role:
+        name: unattended_upgrades
+      tags:
+        - uau
