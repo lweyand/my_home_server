@@ -1,0 +1,6 @@
+---
+
+# Samba workgroup
+samba_workgroup: ''
+# Server netbios name
+samba_netbios_name: ''

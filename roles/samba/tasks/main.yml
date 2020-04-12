@@ -38,10 +38,10 @@
 
 - name: Samba| Configure global samba
   template:
-    src: templates/samba/global.conf
-    dest: /etc/samba/smb.conf
-    owner: root
-    group: root
+    src: 'global.conf'
+    dest: '/etc/samba/smb.conf'
+    owner: 'root'
+    group: 'root'
     mode: 0644
     validate: 'testparm -s %s'
   notify:
@@ -49,8 +49,8 @@
 
 - name: Samba| Configure samba spaces
   blockinfile:
-    dest: /etc/samba/smb.conf
-    block: "{{ lookup('template', 'templates/samba/space-directory.conf') }}"
+    dest: '/etc/samba/smb.conf'
+    block: "{{ lookup('template', 'space-directory.conf') }}"
     marker: "; {mark} ANSIBLE MANAGED BLOCK FOR {{ item.key }}"
     validate: 'testparm -s %s'
   when: "'samba' in item.value.services and 'present' == item.value.state"

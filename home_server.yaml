@@ -5,61 +5,33 @@
   remote_user: root
 
   tasks:
-    - name: include os tasks
-      include: includes/os.yaml
+    - name: import home server role
+      import_role:
+        name: home_server
       tags:
-        - os
-    - name: include users tasks
-      include: includes/users.yaml
-      tags:
-        - users
-    - name: include directories tasks
-      include: includes/directories.yaml
-      tags:
-        - os
-        - dir
-    - name: include firewall tasks
-      include:  includes/firewall.yaml
+        - hms
+    - name: import firewall role
+      import_role: 
+        name: iptables
       tags:
         - frwl
-    - name: include samba tasks
-      include: includes/samba.yaml
+    - name: import samba role
+      import_role:
+        name: samba
       tags:
         - smb
-    - name: include ftp tasks
-      include: includes/ftp.yaml
+    - name: import ftp role
+      import_role:
+        name: proftpd
       tags:
         - ftp
-    - name: include certbot tasks
-      include: includes/certbot.yaml
+    - name: import certbot role
+      import_role:
+        name: certbot
       tags:
         - crt
-    - name: include httpd tasks
-      include: includes/http.yaml
+    - name: import httpd role
+      import_role:
+        name: apache
       tags:
         - http
-
-  handlers:
-    - name: restart samba
-      service:
-        name: smbd
-        state: restarted
-    - name: restart httpd
-      service:
-        name: apache2
-        state: restarted
-    - name: restart ftp
-      service:
-        name: proftpd
-        state: restarted
-    - name: restart sshd
-      service:
-        name: sshd
-        state: reloaded
-    - name: restart iptables
-      command: service netfilter-persistent reload
-#        warn: false
-      register: iptables
-#      command_warnings: False
-      changed_when: "iptables.rc == 0"
-      failed_when: "iptables.rc > 0"

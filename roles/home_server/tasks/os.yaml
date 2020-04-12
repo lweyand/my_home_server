@@ -11,8 +11,8 @@
 
 - name: OS| configure sshd
   template:
-    src: templates/ssh/sshd_config
-    dest: /etc/ssh/sshd_config
+    src: 'sshd_config'
+    dest: '/etc/ssh/sshd_config'
     mode: 0644
     owner: root
     group: root
@@ -20,7 +20,7 @@
 
 - name: OS| configure rssh
   copy:
-    src: files/rssh/rssh.conf
+    src: files/rssh.conf
     dest: /etc/rssh.conf
     mode: 0644
     owner: root

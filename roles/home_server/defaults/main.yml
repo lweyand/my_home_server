@@ -1,0 +1,56 @@
+---
+
+# Spaces configuration, and access rights
+# primary: default space, do not delete, but configure it as you need.
+# <space name>: space name
+#   short_name: if your space name is too long (user space name creation will throw an error), set a short name value.
+#   user: user master of this space (see file_sharing)
+#   group: group allowed to use this space (see file_sharing)
+#   comment: explanation of the space
+#   services: list of services enabled for this space. Values: [http, samba, ftp]
+#   file_sharing: Autheticated access for file sharing or FTP (samba, ftp):
+#      - write_user_read_group: Write=user, Read=Group
+#      - write_group_read_all: Write=Group, Read=All
+#      - write_group_read_group: Write=Group, Read=Group
+#   web_access: Public acces for web or Anonymous FTP (http, ftp)
+#      - all_internet_no_password: All Internet with no password required, local network with no password required
+#      - all_internet_with_password: All internet with password required, local network with password required
+#      - all_internet_with_password_except_local: All internet (password required outside local network)
+#      - lan_no_password: Local network only with no password required)
+#      - lan_with_password: Local network only with password required
+#      - no_access: No web (http or ftp) access
+#   exec_dynamic: Dynamic content execution (CGI, PHP, SSI)
+#      - disable: dynamic content execution disabled
+#      - enable: dynamic content execution enabled
+#
+# Http specific configurations:
+#   server_name: virtualhost server name
+#   server_alias: virtualhost alias names
+#   server_cert_base_path: enable ssl by specify letsencrypt certificate dir path.
+#     By default, set it to: "{{ letsencrypt_cert_path }}/{{ letsencrypt_root_cn }}"
+#     Ex: server_cert_base_path: "{{ letsencrypt_cert_path }}/{{ letsencrypt_root_cn }}"
+spaces: 
+  primary:
+    user: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+    comment: 'primary'
+    services:
+      - http
+    file_sharing: 'write_user_read_group'
+    web_access: 'no_access'
+    exec_dynamic: 'disable'
+    state: present
+
+# Users configurations
+# <username>: user account name
+#   groups:
+#     - <List of secondary user's groups>
+#   shell: <connection shell> default: rssh
+#   ftp_chroot: dir where account is jailed when connected on ftp server
+#   state:
+#     - present: the account is created
+#     - absent: the account is deleted
+server_users:
+  admin:
+    groups: []
+    state: present

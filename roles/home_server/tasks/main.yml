@@ -1,0 +1,15 @@
+---
+
+- name: Home Server| include os tasks
+  import_tasks: os.yaml
+  tags:
+    - os
+- name: Home Server| include users tasks
+  import_tasks: users.yaml
+  tags:
+    - users
+- name: Home Server| include directories tasks
+  import_tasks: directories.yaml
+  tags:
+    - os
+    - dir

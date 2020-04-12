@@ -1,0 +1,6 @@
+---
+
+# Apache httpd packages to install
+iptables_packages:
+  - iptables-persistent
+  - netfilter-persistent

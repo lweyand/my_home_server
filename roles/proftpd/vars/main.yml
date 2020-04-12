@@ -1,0 +1,9 @@
+---
+
+# proftpd configuration base path
+proftpd_base_conf: '/etc/proftpd/'
+# proftpd shared group name
+proftpd_shared_group: 'shared'
+# proftpd packages to install
+proftpd_packages:
+  - 'proftpd-basic'

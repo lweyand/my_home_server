@@ -1,0 +1,7 @@
+---
+
+- name: restart iptables
+  command: service netfilter-persistent reload
+  register: iptables
+  changed_when: "iptables.rc == 0"
+  failed_when: "iptables.rc > 0"

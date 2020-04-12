@@ -1,0 +1,8 @@
+---
+
+# letsencrypt paths
+letsencrypt_basepath: '/etc/letsencrypt'
+letsencrypt_cert_path: "{{ letsencrypt_basepath }}/live"
+letsencrypt_hook_path: "{{ letsencrypt_basepath }}/renewal-hooks"
+# hook template path and hook name
+letsencrypt_hook_name: 'authenticator.sh'

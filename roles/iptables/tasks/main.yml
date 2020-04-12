@@ -1,13 +1,13 @@
 ---
 
-- name: Firewall| Set Interfaces
-  set_fact:
-    exter_if: "{{ ansible_facts.default_ipv4.interface }}"
-    exter_ip: "{{ ansible_facts.default_ipv4.address }}"
+- name: Firewall| Install pckages
+  apt:
+    name: "{{ iptables_packages | join(',') }}"
+    state: present
 
 - name: Firewall| Create iptables file
   template:
-    src: templates/iptables/iptables.j2
+    src: 'iptables.j2'
     dest: "{{ firewall.file }}"
   register: iptables_tpl
   notify: restart iptables

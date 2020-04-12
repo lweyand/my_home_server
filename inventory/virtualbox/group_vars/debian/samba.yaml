@@ -1,38 +1,6 @@
 ---
 
-# Samba base path
-samba_root: "{{ base_path }}"
 # Samba workgroup
-samba_workgroup: "BUTTERFLYEFFECT"
+samba_workgroup: 'WORKGROUP'
 # Server netbios name
-samba_netbios_name: "server_test"
-# Samba packages to instal
-samba_packages:
-  - attr
-  - libaio1
-  - libavahi-client3
-  - libavahi-common-data
-  - libavahi-common3
-  - libcups2
-  - libfile-copy-recursive-perl
-  - libgpgme11
-  - libldb1
-  - libpython2.7
-  - libtalloc2
-  - libtdb1
-  - libtevent0
-  - libwbclient0
-  - python-crypto
-  - python-dnspython
-  - python-ldb
-  - python-samba
-  - python-talloc
-  - python-tdb
-  - samba
-  - samba-common
-  - samba-common-bin
-  - samba-dsdb-modules
-  - samba-libs
-  - samba-vfs-modules
-  - tdb-tools
-  - update-inetd
+samba_netbios_name: "Home Server"

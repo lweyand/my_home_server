@@ -2,13 +2,13 @@
 
 # set to true while debugging hook_template, because
 # letsencrypt has a rate limite of 50 renewals per week.
-letsencrypt_test: true
+letsencrypt_test: false
 # set the certificate CN
-letsencrypt_root_cn: 'sample.fr'
+letsencrypt_root_cn: ''
 # hook template path and hook name
-letsencrypt_hook_template: 'templates/certbot/bookmyname-authenticator.sh'
+letsencrypt_hook_template: ''
 # letsencrypt configuration email
-letsencrypt_email: 'address@mail.net'
+letsencrypt_email: ''
 # letsencrypt renewal systemd timer
 # see: https://www.freedesktop.org/software/systemd/man/systemd.time.html
 letsencrypt_renew_timer: '*-*-* 00,12:00:00'

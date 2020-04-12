@@ -32,7 +32,7 @@
 
 - name: Certbot| Deploy certbot services
   template:
-    src: "templates/certbot/{{ item }}"
+    src: "{{ item }}"
     dest: "/lib/systemd/system/{{ item }}"
     owner: 'root'
     group: 'root'

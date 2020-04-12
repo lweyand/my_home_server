@@ -1,0 +1,28 @@
+---
+
+# Define esternal if name
+exter_if: "{{ ansible_facts.default_ipv4.interface }}"
+# Define external ip
+exter_ip: "{{ ansible_facts.default_ipv4.address }}"
+
+# Iptable configuration
+# file: rule file name
+# minimize_delay: list of ports to minimize delay in mangle table
+# opened_tcp_ports: list of tcp ports to open (default all is closed)
+#   syntax for a single port (ftp):
+#      - '21'
+#   syntax for a port range:
+#      - '8080:8085'
+# opened_udp_ports: list of udp ports to open (default all is closed)
+#   syntax for a single port (ftp):
+#      - '21'
+#   syntax for a port range:
+#      - '137:138'
+firewall:
+  file: '/etc/iptables/rules.v4'
+  minimize_delay: []
+  opened_tcp_ports: []
+  opened_udp_ports: []
+  closed_tcp_ports: []
+  closed_udp_ports: []
+  

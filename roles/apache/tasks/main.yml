@@ -19,7 +19,7 @@
 
 - name: Apache| Deploy config
   template:
-    src: "templates/apache2/apache2.conf"
+    src: "apache2.conf"
     dest: "/etc/apache2/apache2.conf"
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
@@ -28,7 +28,7 @@
 
 - name: Apache| Deploy base configuration
   template:
-    src: "templates/apache2/apache2.conf"
+    src: "apache2.conf"
     dest: "/etc/apache2/apache2.conf"
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
@@ -39,7 +39,7 @@
 
 - name: Apache| Deploy default virtual hosts Configuration
   template:
-    src: "templates/apache2/default-virtualhost.conf"
+    src: "default-virtualhost.conf"
     dest: "/etc/apache2/sites-available/default.conf"
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
@@ -58,7 +58,7 @@
 
 - name: Apache| Deploy virtual hosts Configuration
   template:
-    src: "templates/apache2/space-virtualhost.conf"
+    src: "space-virtualhost.conf"
     dest: "/etc/apache2/sites-available/{{ item.key }}.conf"
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
@@ -108,7 +108,7 @@
 
 - name: Apache| Deploy base index html
   template:
-    src: "templates/tests/apache2/index.html"
+    src: "index.html"
     dest: "{{ base_path }}/{{ item.key }}/{{ html_dir }}/index.html"
     owner: "{{ item.value.user }}"
     group: "{{ item.value.group }}"
@@ -118,7 +118,7 @@
     - restart httpd
 - name: Apache| Deploy base index php
   template:
-    src: "templates/tests/apache2/index.php"
+    src: "index.php"
     dest: "{{ base_path }}/{{ item.key }}/{{ html_dir }}/index.php"
     owner: "{{ item.value.user }}"
     group: "{{ item.value.group }}"

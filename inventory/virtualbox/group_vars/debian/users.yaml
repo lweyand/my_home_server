@@ -38,4 +38,3 @@ server_users:
       - 'poto_g'
       - 'toto_g'
     state: absent
-

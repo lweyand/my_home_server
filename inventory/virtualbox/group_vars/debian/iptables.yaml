@@ -1,25 +1,7 @@
 ---
 
-# spaces base path
-base_path: '/home/srv'
-
-# space users dir
-users_dir: 'users'
-# http server files dir for a space
-html_dir: 'www'
-# http server cgi dir for a space
-cgi_dir: 'cgi-bin'
-# ftp and samba files dir for a space
-ftp_dir: 'files'
-
-# OS base packages to install
-base_packages:
-  - net-tools
-  - apt-transport-https
-  - python-pip
-  - rssh
-  - iptables-persistent
-  - netfilter-persistent
+exter_if: "{{ ansible_facts.default_ipv4.interface }}"
+exter_ip: "{{ ansible_facts.default_ipv4.address }}"
 
 # Iptable configuration
 # file: rule file name
@@ -49,3 +31,4 @@ firewall:
     - 137:138
   closed_tcp_ports: []
   closed_udp_ports: []
+  
