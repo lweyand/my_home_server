@@ -1,15 +1,5 @@
 ---
 
-# proftpd user and group
-proftpd_user: 'root'
-proftpd_group: 'root'
-
-# Firewall rule for gateway
-# public: LAN and internet acces
-# private: LAN access only
-# NOT USED
-proftpd_access: 'public'
-
 # Allow login from:
 # - LAN
 # - everywhere

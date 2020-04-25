@@ -1,5 +1,0 @@
----
-
-# Apache user and group
-apache_user: 'www-data'
-apache_group: 'www-data'

@@ -1,8 +1,5 @@
 ---
 
-exter_if: "{{ ansible_facts.default_ipv4.interface }}"
-exter_ip: "{{ ansible_facts.default_ipv4.address }}"
-
 # Iptable configuration
 # file: rule file name
 # minimize_delay: list of ports to minimize delay in mangle table

@@ -1,5 +1,7 @@
 ---
 
+server_hostname: server
+
 # Spaces configuration, and access rights
 # primary: default space, do not delete, but configure it as you need.
 # <space name>: space name

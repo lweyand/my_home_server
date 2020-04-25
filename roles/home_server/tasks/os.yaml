@@ -39,3 +39,16 @@
     mode: 0775
     owner: root
     group: root
+
+- name: OS| Get hostname
+  command: "hostname"
+  register: hostname
+  failed_when: "hostname.rc > 0"
+
+- name: OS| Set hostname {{ server_hostname }}
+  command: "hostnamectl set-hostname {{ server_hostname }}"
+  register: hostnamectl
+  changed_when: "hostnamectl.rc == 0"
+  failed_when: "hostnamectl.rc > 0"
+  when: "server_hostname != hostname.stdout"
+  
