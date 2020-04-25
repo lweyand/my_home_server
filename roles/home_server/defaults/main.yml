@@ -49,6 +49,7 @@ spaces:
 
 
 # Users configurations
+# admin: default user for maintenance mails, do not delete
 # <username>: user account name
 #   groups:
 #     - <List of secondary user's groups>

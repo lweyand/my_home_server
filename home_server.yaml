@@ -15,6 +15,12 @@
         name: iptables
       tags:
         - frwl
+    
+    - name: import postfix role
+      import_role: 
+        name: postfix
+      tags:
+        - mail
     - name: import samba role
       import_role:
         name: samba

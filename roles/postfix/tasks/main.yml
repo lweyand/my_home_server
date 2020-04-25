@@ -1,0 +1,17 @@
+---
+
+- name: Postfix| Install
+  apt:
+    name: "{{ postfix_packages | join(',') }}"
+    state: present
+#exim4 exim4-base exim4-config exim4-daemon-light guile-2.0-libs libfribidi0 libgc1c2 libgsasl7 libkyotocabinet16v5 liblzo2-2 libmailutils5 libmariadbclient18 libntlm0
+#  mailutils mailutils-common mysql-common
+- name: Postfix| Configure
+  become: yes
+  copy:
+    src: "files/{{ item }}"
+    dest: "/etc/postfix/{{ item }}"
+  loop:
+    - main.cf
+    - master.cf
+  notify: restart postfix

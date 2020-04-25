@@ -1,0 +1,7 @@
+---
+
+- name: restart postfix
+  command: postfix reload
+  register: postfix
+  changed_when: "postfix.rc == 0"
+  failed_when: "postfix.rc > 0"
