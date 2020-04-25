@@ -7,6 +7,7 @@ letsencrypt_test: true
 letsencrypt_root_cn: 'sample.fr'
 # hook template path and hook name
 letsencrypt_hook_template: 'templates/certbot/bookmyname-authenticator.sh'
+letsencrypt_hook_name: 'authenticator.sh'
 # letsencrypt configuration email
 letsencrypt_email: 'address@mail.net'
 # letsencrypt renewal systemd timer
