@@ -1,5 +1,10 @@
 ---
 
+certbot_packages:
+  - certbot
+  - dnsutils
+  - wget
+
 # letsencrypt paths
 letsencrypt_basepath: '/etc/letsencrypt'
 letsencrypt_cert_path: "{{ letsencrypt_basepath }}/live"

@@ -3,10 +3,8 @@
 # Let's encrypt
 - name: Certbot| Install certbot
   apt:
-    name: "{{ item }}"
+    name: "{{ certbot_packages | join(',') }}"
     state: present
-  loop:
-    - certbot
 
 - name: Certbot| Create dir {{ letsencrypt_hook_path }}
   file:
@@ -62,7 +60,7 @@
   register: demon_start
   failed_when: "demon_start.rc > 0"
   changed_when: "demon_start.rc == 0"
-  when: "certbot_services.changed == true or deploy_auth_script.changed == true"
+  when: "certbot_services.changed == true or deploy_auth_script.changed == true or certbot_force_create == true"
   loop:
     - 'certbot.service'
     - 'certbot.timer'

@@ -1,5 +1,7 @@
 ---
 
+certbot_force_create: false
+
 # set to true while debugging hook_template, because
 # letsencrypt has a rate limite of 50 renewals per week.
 letsencrypt_test: false
