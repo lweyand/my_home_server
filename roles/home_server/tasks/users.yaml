@@ -49,7 +49,6 @@
     home: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
     create_home: no
     state: "{{ item.value.state }}"
-    update_password: 'on_create'
     append: no
   loop: "{{ lookup('dict', server_users_psswds ) }}"
 
