@@ -44,7 +44,7 @@
     name: "{{ item.key }}"
     group: "{{ item.key }}"
     groups: "{% if item.value.groups is defined %}{{ item.value.groups | join(',') + ',' + proftpd_shared_group }}{% else %}{{ proftpd_shared_group }}{%endif%}"
-    shell: "{% if item.value.shell is defined %}{{ item.value.shell }}{% else %}/usr/bin/rssh{%endif%}"
+    shell: "{% if item.value.shell is defined %}{{ item.value.shell }}{% else %}/bin/rbash{%endif%}"
     password: "{{ item.value.password | password_hash('sha512', secret_salt) }}"
     home: "{{ base_path }}/{{ users_dir }}/{{ item.key }}/home"
     create_home: no

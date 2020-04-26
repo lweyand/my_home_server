@@ -31,7 +31,7 @@ server_hostname: server
 #   server_cert_base_path: enable ssl by specify letsencrypt certificate dir path.
 #     By default, set it to: "{{ letsencrypt_cert_path }}/{{ letsencrypt_root_cn }}"
 #     Ex: server_cert_base_path: "{{ letsencrypt_cert_path }}/{{ letsencrypt_root_cn }}"
-spaces: 
+spaces:
   primary:
     user: "{{ apache_user }}"
     group: "{{ apache_group }}"
@@ -47,7 +47,7 @@ spaces:
 # <username>: user account name
 #   groups:
 #     - <List of secondary user's groups>
-#   shell: <connection shell> default: rssh
+#   shell: <connection shell> default: rbash
 #   ftp_chroot: dir where account is jailed when connected on ftp server
 #   state:
 #     - present: the account is created

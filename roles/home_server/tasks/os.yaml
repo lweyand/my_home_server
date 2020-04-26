@@ -18,20 +18,6 @@
     group: root
   notify: restart sshd
 
-- name: OS| configure rssh
-  copy:
-    src: files/rssh.conf
-    dest: /etc/rssh.conf
-    mode: 0644
-    owner: root
-    group: root
-
-- name: OS| Add rssh to /etc/shells
-  lineinfile:
-    path: /etc/shells
-    line: '/usr/bin/rssh'
-    state: present
-
 - name: OS| Create base directory
   file:
     path: "{{ base_path }}"
