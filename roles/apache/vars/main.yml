@@ -3,14 +3,14 @@
 # Apache httpd packages to install
 httpd_packages:
   - apache2
-  - php7.0
-  - libapache2-mod-php7.0
-  - php7.0-curl
-  - php7.0-gd
+  - php7.3
+  - libapache2-mod-php7.3
+  - php7.3-curl
+  - php7.3-gd
   - php-pear
-  - php7.0-imagick
-  - php7.0-mcrypt
-  - php7.0-dev
+  - php7.3-imagick
+# - php7.3-mcrypt
+  - php7.3-dev
   - libpcre3-dev
   - libapache2-mod-authnz-external
   - pwauth
@@ -21,6 +21,6 @@ httpd_modules:
   - authnz_external
   - mpm_prefork
   - autoindex
-  - php7.0
+  - php7.3
   - include
   - ssl

@@ -12,7 +12,7 @@
 - name: Apache| Configure php
   copy:
     src: files/php/apache2/php.ini
-    dest: /etc/php/7.0/apache2/php.ini
+    dest: /etc/php/7.3/apache2/php.ini
     mode: 0644
     owner: root
     group: root

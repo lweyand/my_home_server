@@ -1,6 +1,6 @@
 ---
 
-- name: Firewall| Install pckages
+- name: Firewall| Install packages
   apt:
     name: "{{ iptables_packages | join(',') }}"
     state: present

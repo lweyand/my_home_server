@@ -51,4 +51,3 @@
   changed_when: "hostnamectl.rc == 0"
   failed_when: "hostnamectl.rc > 0"
   when: "server_hostname != hostname.stdout"
-  

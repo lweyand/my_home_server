@@ -15,6 +15,6 @@ ftp_dir: 'files'
 # OS base packages to install
 base_packages:
   - net-tools
+  - dnsutils
   - apt-transport-https
-  - python-pip
-  - rssh
+  - python3-pip
