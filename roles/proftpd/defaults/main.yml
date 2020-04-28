@@ -1,5 +1,7 @@
 ---
 
+proftpd_test_files: 'false'
+
 # proftpd user and group
 proftpd_user: 'root'
 proftpd_group: 'root'

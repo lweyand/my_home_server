@@ -41,5 +41,5 @@
     dest: "{{ base_path }}/{{ item.key }}/{{ ftp_dir }}/{{ item.key }}.txt"
     owner: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
     group: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
-  when: "'ftp' in item.value.services and 'present' == item.value.state"
+  when: "'ftp' in item.value.services and 'present' == item.value.state and 'true' == proftpd_test_files"
   loop: "{{ lookup('dict', spaces) }}"
