@@ -2,6 +2,12 @@
 
 certbot_force_create: false
 
+# Read the doc (man certbot)
+# --renew-by-default
+# --keep-until-expiring
+# --renew-with-new-domains
+letsencrypt_renewal_behaviour: '--keep-until-expiring'
+
 # set to true while debugging hook_template, because
 # letsencrypt has a rate limite of 50 renewals per week.
 letsencrypt_test: false
