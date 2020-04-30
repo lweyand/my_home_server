@@ -1,7 +1,0 @@
----
-proftpd_test_files: 'true'
-
-# Allow login from:
-# - LAN
-# - everywhere
-proftp_auth: 'everywhere'
