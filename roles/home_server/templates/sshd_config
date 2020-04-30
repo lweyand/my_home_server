@@ -28,7 +28,8 @@ LogLevel INFO
 # Authentication:
 
 LoginGraceTime 600
-PermitRootLogin yes
+PermitRootLogin prohibit-password
+#PermitRootLogin yes
 StrictModes yes
 MaxAuthTries 2
 #MaxSessions 10
