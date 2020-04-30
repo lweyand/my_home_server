@@ -20,9 +20,16 @@ exter_ip: "{{ ansible_facts.default_ipv4.address }}"
 #      - '137:138'
 firewall:
   file: '/etc/iptables/rules.v4'
-  minimize_delay: []
-  opened_tcp_ports: []
-  opened_udp_ports: []
+  minimize_delay:
+    - 21
+    - 80
+    - 443
+  opened_tcp_ports:
+    - 22
+    - 21
+    - 80
+    - 443
+  opened_udp_ports:
+    - 137:138
   closed_tcp_ports: []
   closed_udp_ports: []
-  
