@@ -7,3 +7,5 @@ files/proftpd/*
 files/samba/*
 files/sme/*
 files/ssh/*
+inventory/virtualbox/*
+inventory/real/*
