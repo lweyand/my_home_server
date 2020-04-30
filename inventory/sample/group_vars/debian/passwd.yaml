@@ -1,0 +1,16 @@
+---
+
+# The salt to encrypt password
+secret_salt: 'mysalt'
+
+# The list of the passwords by users
+server_passwords:
+  admin:
+    password: 'i-am-admin'
+  laurent:
+    password: 'no!no!'
+  friends:
+    password: 'be_welcome'
+
+
+certbot_api_key: 'MY_DOMAIN_NAME_PROVIDER_CREDENTIALS'

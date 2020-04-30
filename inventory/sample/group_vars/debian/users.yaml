@@ -1,0 +1,34 @@
+---
+
+# Users configurations
+# <username>: user account name
+#   groups:
+#     - <List of secondary user's groups>
+#   shell: <connection shell> default: rbash
+#   ftp_chroot: dir where account is jailed when connected on ftp server. By default users will in their home dire. Value:
+#     - /<space name>/files for chrooting in ftp directory
+#     - /<space name>/www for chrooting in apache site directory
+#   state:
+#     - present: the account is created
+#     - absent: the account is deleted
+server_users:
+  admin:
+    groups:
+      - 'admin_g'
+      - 'ftp_g'
+      - 'http_g'
+      - 'samba_g'
+      - 'friends_g'
+    state: present
+  laurent:
+    groups:
+      - 'ftp_g'
+      - 'http_g'
+      - 'samba_g'
+      - 'friends_g'
+    state: present
+  friends:
+    groups:
+      - 'friends_g'
+    ftp_chroot: '/all_in_one/files'
+    state: present

@@ -1,0 +1,6 @@
+---
+
+# Samba workgroup
+samba_workgroup: 'WORKGROUP'
+# Server netbios name
+samba_netbios_name: 'my home server'

@@ -1,5 +1,6 @@
 ---
 
+# Configure server hostname
 server_hostname: server
 
 # Spaces configuration, and access rights
@@ -24,6 +25,9 @@ server_hostname: server
 #   exec_dynamic: Dynamic content execution (CGI, PHP, SSI)
 #      - disable: dynamic content execution disabled
 #      - enable: dynamic content execution enabled
+#   state:
+#     - present: the space is created
+#     - absent: the space is deleted
 #
 # Http specific configurations:
 #   server_name: virtualhost server name
@@ -43,12 +47,15 @@ spaces:
     exec_dynamic: 'disable'
     state: present
 
+
 # Users configurations
 # <username>: user account name
 #   groups:
 #     - <List of secondary user's groups>
 #   shell: <connection shell> default: rbash
-#   ftp_chroot: dir where account is jailed when connected on ftp server
+#   ftp_chroot: dir where account is jailed when connected on ftp server. By default users will in their home dire. Value:
+#     - /<space name>/files for chrooting in ftp directory
+#     - /<space name>/www for chrooting in apache site directory
 #   state:
 #     - present: the account is created
 #     - absent: the account is deleted
