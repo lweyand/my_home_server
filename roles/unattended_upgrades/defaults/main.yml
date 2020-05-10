@@ -1,7 +1,7 @@
 ---
 
 uau_automatic_reboot_time: '05:30'
-uau_mail: 'admin@server.local'
+uau_mail: "admin@{{ server_hostname }}.{{ postfix_tld }}"
 uau_mail_only_on_error: false
 
 uau_daily_download_time: '04:00'

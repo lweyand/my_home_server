@@ -1,0 +1,4 @@
+---
+
+postfix_tld: 'local'
+postfix_hostname: "{{ server_hostname }}.{{ postfix_tld }}"
