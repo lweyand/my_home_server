@@ -65,6 +65,7 @@
     state: 'directory'
     owner: "{{ item.key }}"
     group: "{{ item.key }}"
+    recurse: yes
     mode: 0700
   loop: "{{ lookup('dict', server_users) }}"
   when: "'present' == item.value.state"
