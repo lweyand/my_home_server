@@ -1,5 +1,8 @@
 ---
 
+# Configure server hostname
+server_hostname: server
+
 # Spaces configuration, and access rights
 # primary: default space, do not delete, but configure it as you need.
 # <space name>: space name
@@ -15,6 +18,8 @@
 #      - write_user_read_group: Write=User, Read=Group
 #      - write_group_read_all: Write=Group, Read=All
 #      - write_group_read_group: Write=Group, Read=Group
+#   file_sharing_allow_group_all_access: (default: false) When Write=Group, by default samba only give access to file dir,
+#                                        if set this value to true, they can access to all dirs in space.
 #   web_access: Public acces for web or Anonymous FTP [apply to http, ftp]
 #      - all_internet_no_password: All Internet with no password required, local network with no password required
 #      - all_internet_with_password: All internet with password required, local network with password required

@@ -149,6 +149,14 @@ C'est dans cet partie que vous aller configurer vos espaces. Un espace est un r√
      * **write_user_read_group**: Write=User, Read=Group
      * **write_group_read_all**: Write=Group, Read=All
      * **write_group_read_group**: Write=Group, Read=Group
+  * **file_sharing**: Autheticated access for file sharing or FTP *[apply to samba, ftp]*:
+     * **write_user_read_group**: Write=user, Read=Group
+       * samba: user and groupe have access to all space dirs (www, files, cgi-bin)
+     * **write_group_read_all**: Write=Group, Read=All
+       * samba: group has only access to files dir (see **file_sharing_allow_group_all_access** to change behaviour)
+     * **write_group_read_group**: Write=Group, Read=Group
+       * samba: group has only access to files dir (see **file_sharing_allow_group_all_access** to change behaviour)
+  * **file_sharing_allow_group_all_access**: (default: false) When *write_group_\** is configured in **file_sharing**, by default samba only give access to the *files* directory, if this parameter is set to true, they can access to all space directories.
   * **web_access**: Public acces for web or Anonymous FTP *[apply to http, ftp]*
      * **all_internet_no_password**: All Internet with no password required, local network with no password required
      * **all_internet_with_password**: All internet with password required, local network with password required
