@@ -1,0 +1,7 @@
+---
+
+- name: Alerting| include postfix tasks
+  import_tasks: postfix.yml
+
+- name: Alerting| include dovecot tasks
+  import_tasks: dovecot.yml

@@ -1,0 +1,10 @@
+---
+
+postfix_packages:
+  - postfix
+  - postfix-sqlite
+
+dovecot_packages:
+  - dovecot-core
+  - dovecot-pop3d
+  - dovecot-sqlite

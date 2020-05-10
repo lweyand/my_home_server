@@ -1,5 +1,0 @@
----
-
-postfix_packages:
-  - postfix
-  - postfix-sqlite

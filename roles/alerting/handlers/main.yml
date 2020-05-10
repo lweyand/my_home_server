@@ -5,3 +5,8 @@
   register: postfix
   changed_when: "postfix.rc == 0"
   failed_when: "postfix.rc > 0"
+
+- name: restart dovecot
+  service:
+    name: dovecot
+    state: restarted
