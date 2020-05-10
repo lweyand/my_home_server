@@ -215,6 +215,19 @@ Le script est specifique à mon registrar DNS bookmyname.
 
 Voir le script [bookmyname-authenticator.sh](templates/certbot/bookmyname-authenticator.sh)
 
+# Configuration des mises à jour automatiques
+
+Ces mises à jour sont faites avec [Unattended Upgrades](https://wiki.debian.org/UnattendedUpgrades).
+
+Configuration par défaut:
+* **uau_automatic_reboot_time**: Heure à laquelle se fait le reboot si il y a besoin (défaut: '05:30')
+* **uau_mail**: Addresse mail de notification des mises à jours (défaut: 'admin@server.local')
+* **uau_mail_only_on_error**: Envoie des mails uniquement en cas d'erreur (défaut: false)
+* **uau_daily_download_time**: Heure à laquelle les mises à jours sont téléchargées (défaut: '04:00')
+* **uau_daily_upgrades_time**: Heure à laquelle les mises à jours sont appliquées (défaut: '04:30')
+
+Pour modifier la configuration, créez dans le répertoire *myhomeserver/group_vars/debian* un fichier **upgrades.yaml**. Et surchargez les valeurs précédentes.
+
 # Tags disponibles
 
 * *crt*: rejoue la configuration de cerbot
@@ -225,5 +238,5 @@ Voir le script [bookmyname-authenticator.sh](templates/certbot/bookmyname-authen
 * *http*: rejoue la configuration de apache2
 * *os*: rejoue la configuration du hostname, des répertoires de base, de ssh
 * *smb*: rejoue la configuration de samba
-* *uau*: rejoue la configuration de unanttended upgrades
+* *uau*: rejoue la configuration de unattended upgrades
 * *users*: rejoue la configuration des utilisateurs (ajout/supression)

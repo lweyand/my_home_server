@@ -1,14 +1,9 @@
 ---
 
-uau_configuration_file_source: 'files/50unattended-upgrades'
-uau_configuration_file_target: '/etc/apt/apt.conf.d/50unattended-upgrades'
-uau_update_file_source: 'files/20auto-upgrades'
-uau_update_file_target: '/etc/apt/apt.conf.d/20auto-upgrades'
-uau_periodic_file_source: 'files/02periodic'
-uau_periodic_file_target: '/etc/apt/apt.conf.d/02periodic'
-uau_daily_download_timer_file_source: 'files/apt-daily.timer.conf'
-uau_daily_download_timer_dir_target: '/etc/systemd/system/apt-daily.timer.d'
-uau_daily_download_timer_file_target: '/etc/systemd/system/apt-daily.timer.d/override.conf'
-uau_daily_upgrades_timer_file_source: 'files/apt-daily-upgrade.timer.conf'
-uau_daily_upgrades_timer_dir_target: '/etc/systemd/system/apt-daily-upgrade.timer.d'
-uau_daily_upgrades_timer_file_target: '/etc/systemd/system/apt-daily-upgrade.timer.d/override.conf'
+uau_automatic_reboot_time: '05:30'
+uau_mail: 'admin@server.local'
+uau_mail_only_on_error: false
+
+uau_daily_download_time: '04:00'
+
+uau_daily_upgrades_time: '04:30'
