@@ -149,6 +149,14 @@ C'est dans cet partie que vous aller configurer vos espaces. Un espace est un r�
      * **write_user_read_group**: Write=User, Read=Group
      * **write_group_read_all**: Write=Group, Read=All
      * **write_group_read_group**: Write=Group, Read=Group
+  * **file_sharing**: Autheticated access for file sharing or FTP *[apply to samba, ftp]*:
+     * **write_user_read_group**: Write=user, Read=Group
+       * samba: user and groupe have access to all space dirs (www, files, cgi-bin)
+     * **write_group_read_all**: Write=Group, Read=All
+       * samba: group has only access to files dir (see **file_sharing_allow_group_all_access** to change behaviour)
+     * **write_group_read_group**: Write=Group, Read=Group
+       * samba: group has only access to files dir (see **file_sharing_allow_group_all_access** to change behaviour)
+  * **file_sharing_allow_group_all_access**: (default: false) When *write_group_\** is configured in **file_sharing**, by default samba only give access to the *files* directory, if this parameter is set to true, they can access to all space directories.
   * **web_access**: Public acces for web or Anonymous FTP *[apply to http, ftp]*
      * **all_internet_no_password**: All Internet with no password required, local network with no password required
      * **all_internet_with_password**: All internet with password required, local network with password required
@@ -207,6 +215,19 @@ Le script est specifique à mon registrar DNS bookmyname.
 
 Voir le script [bookmyname-authenticator.sh](templates/certbot/bookmyname-authenticator.sh)
 
+# Configuration des mises à jour automatiques
+
+Ces mises à jour sont faites avec [Unattended Upgrades](https://wiki.debian.org/UnattendedUpgrades).
+
+Configuration par défaut:
+* **uau_automatic_reboot_time**: Heure à laquelle se fait le reboot si il y a besoin (défaut: '05:30')
+* **uau_mail**: Addresse mail de notification des mises à jours (défaut: 'admin@server.local')
+* **uau_mail_only_on_error**: Envoie des mails uniquement en cas d'erreur (défaut: false)
+* **uau_daily_download_time**: Heure à laquelle les mises à jours sont téléchargées (défaut: '04:00')
+* **uau_daily_upgrades_time**: Heure à laquelle les mises à jours sont appliquées (défaut: '04:30')
+
+Pour modifier la configuration, créez dans le répertoire *myhomeserver/group_vars/debian* un fichier **upgrades.yaml**. Et surchargez les valeurs précédentes.
+
 # Tags disponibles
 
 * *crt*: rejoue la configuration de cerbot
@@ -217,5 +238,5 @@ Voir le script [bookmyname-authenticator.sh](templates/certbot/bookmyname-authen
 * *http*: rejoue la configuration de apache2
 * *os*: rejoue la configuration du hostname, des répertoires de base, de ssh
 * *smb*: rejoue la configuration de samba
-* *uau*: rejoue la configuration de unanttended upgrades
+* *uau*: rejoue la configuration de unattended upgrades
 * *users*: rejoue la configuration des utilisateurs (ajout/supression)

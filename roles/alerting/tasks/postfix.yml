@@ -1,0 +1,23 @@
+---
+
+- name: Postfix| Install
+  apt:
+    name: "{{ postfix_packages | join(',') }}"
+    state: present
+
+- name: Postfix| Configure
+  become: yes
+  copy:
+    src: "files/{{ item }}"
+    dest: "/etc/postfix/{{ item }}"
+  loop:
+    - master.cf
+  notify: restart postfix
+- name: Postfix| Configure
+  become: yes
+  template:
+    src: "templates/{{ item }}"
+    dest: "/etc/postfix/{{ item }}"
+  loop:
+    - main.cf
+  notify: restart postfix

@@ -108,17 +108,16 @@
     dest: "{{ base_path }}/{{ item.key }}/{{ html_dir }}/index.html"
     owner: "{{ item.value.user }}"
     group: "{{ item.value.group }}"
+    force: no
   when: "'http' in item.value.services and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
-  notify:
-    - restart httpd
+
 - name: Apache| Deploy base index php
   template:
     src: "index.php"
     dest: "{{ base_path }}/{{ item.key }}/{{ html_dir }}/index.php"
     owner: "{{ item.value.user }}"
     group: "{{ item.value.group }}"
+    force: no
   when: "'http' in item.value.services and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
-  notify:
-    - restart httpd

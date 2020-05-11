@@ -1,0 +1,20 @@
+---
+
+- name: Dovecot| Install
+  apt:
+    name: "{{ dovecot_packages | join(',') }}"
+    state: present
+
+- name: Dovecot| Configure
+  become: yes
+  copy:
+    src: "files/{{ item.file }}"
+    dest: "{{ item.path }}{{ item.file }}"
+  loop:
+    - file: 'dovecot.conf'
+      path: '/etc/dovecot/'
+    - file: '10-auth.conf'
+      path: '/etc/dovecot/conf.d/'
+    - file: '10-master.conf'
+      path: '/etc/dovecot/conf.d/'
+  notify: restart dovecot

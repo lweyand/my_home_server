@@ -13,8 +13,13 @@ server_hostname: server
 #   services: list of services enabled for this space. Values: [http, samba, ftp]
 #   file_sharing: Autheticated access for file sharing or FTP (samba, ftp):
 #      - write_user_read_group: Write=user, Read=Group
+#         samba: user and groupe have access to all space dirs (www, files, cgi-bin)
 #      - write_group_read_all: Write=Group, Read=All
+#         samba: group has only access to files dir
 #      - write_group_read_group: Write=Group, Read=Group
+#         samba: group has only access to files dir
+#   file_sharing_allow_group_all_access: (default: false) When Write=Group, by default samba only give access to file dir,
+#                                        if set this value to true, they can access to all dirs in space.
 #   web_access: Public acces for web or Anonymous FTP (http, ftp)
 #      - all_internet_no_password: All Internet with no password required, local network with no password required
 #      - all_internet_with_password: All internet with password required, local network with password required
@@ -49,6 +54,7 @@ spaces:
 
 
 # Users configurations
+# admin: default user for maintenance mails, do not delete
 # <username>: user account name
 #   groups:
 #     - <List of secondary user's groups>

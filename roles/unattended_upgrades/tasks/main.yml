@@ -22,7 +22,7 @@
 
 - name: Upgrades| Configure upgrades
   become: yes
-  copy:
+  template:
     src: "{{ uau_configuration_file_source }}"
     dest: "{{ uau_configuration_file_target }}"
 
@@ -38,7 +38,7 @@
 
 - name: Upgrades| Configure daily download timer
   become: yes
-  copy:
+  template:
     src: "{{ uau_daily_download_timer_file_source }}"
     dest: "{{ uau_daily_download_timer_file_target }}"
   notify: restart apt-daily.timer
@@ -51,7 +51,7 @@
 
 - name: Upgrades| Configure upgrades download timer
   become: yes
-  copy:
+  template:
     src: "{{ uau_daily_upgrades_timer_file_source }}"
     dest: "{{ uau_daily_upgrades_timer_file_target }}"
   notify: restart service apt-daily-upgrade.timer

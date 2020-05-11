@@ -11,10 +11,16 @@
       tags:
         - hms
     - name: import firewall role
-      import_role: 
+      import_role:
         name: iptables
       tags:
         - frwl
+
+    - name: import alerting role
+      import_role:
+        name: alerting
+      tags:
+        - alrt
     - name: import samba role
       import_role:
         name: samba
