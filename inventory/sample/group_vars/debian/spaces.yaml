@@ -27,6 +27,7 @@ server_hostname: server
 #      - lan_no_password: Local network only with no password required)
 #      - lan_with_password: Local network only with password required
 #      - no_access: No web (http or ftp) access
+#   web_no_access_dirs: disallow access to specific dirs (http)
 #   exec_dynamic: Dynamic content execution (CGI, PHP, SSI) [apply to http]
 #      - disable: dynamic content execution disabled
 #      - enable: dynamic content execution enabled
@@ -68,6 +69,19 @@ spaces:
       - http
     file_sharing: 'write_user_read_group'
     web_access: 'all_internet_no_password'
+    exec_dynamic: 'disable'
+    state: present
+  http_no_access_dirs:
+    user: laurent
+    group: http_g
+    comment: 'HTTP site with specific dirs disallowed access'
+    services:
+      - http
+    file_sharing: 'write_user_read_group'
+    web_access: 'all_internet_no_password'
+    web_no_access_dirs:
+      - 'conf'
+      - 'bin'
     exec_dynamic: 'disable'
     state: present
   php_only:

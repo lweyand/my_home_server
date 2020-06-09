@@ -164,6 +164,7 @@ C'est dans cet partie que vous aller configurer vos espaces. Un espace est un r�
      * **lan_no_password**: Local network only with no password required)
      * **lan_with_password**: Local network only with password required
      * **no_access**: No web (http or ftp) access
+  * **web_no_access_dirs**: disallow access to specific dirs *[apply to http]*
   * **exec_dynamic**: Dynamic content execution (CGI, PHP, SSI) *[apply to http]*
      * **disable**: dynamic content execution disabled
      * **enable**: dynamic content execution enabled
@@ -195,7 +196,7 @@ Dans *myhomeserver/group_vars/debian*, créer le fichier **certbot.yaml**.
 Dans ce fichier vous allez pouvoir configurer:
 * **certbot_force_create**: Force la mise à jour/création du certificat lors de l'exécution du playbook (defaut: false)
 * **letsencrypt_renewal_behaviour**: comportement de de cerbot pour la mise à jour des certificats(defaut:'--keep-until-expiring')
-  * lire la documentation de cerbot (*man certbot*), le svaleurs possibles sont:
+  * lire la documentation de cerbot (*man certbot*), les valeurs possibles sont:
     * '--renew-by-default'
     * '--keep-until-expiring'
     * '--renew-with-new-domains'
@@ -215,7 +216,7 @@ Le script est specifique à mon registrar DNS bookmyname.
 
 Voir le script [bookmyname-authenticator.sh](templates/certbot/bookmyname-authenticator.sh)
 
-# Configuration des mises à jour automatiques
+### Configuration des mises à jour automatiques
 
 Ces mises à jour sont faites avec [Unattended Upgrades](https://wiki.debian.org/UnattendedUpgrades).
 
@@ -228,13 +229,25 @@ Configuration par défaut:
 
 Pour modifier la configuration, créez dans le répertoire *myhomeserver/group_vars/debian* un fichier **upgrades.yaml**. Et surchargez les valeurs précédentes.
 
-# Tags disponibles
+# Installation avec Ansible
 
-* *crt*: rejoue la configuration de cerbot
+Installation des prérequis pour de playbook:
+```shell
+pip install -r requirements.txt
+```
+
+Exécution du playbook:
+```shell
+ansible-playbook -i inventory/myhomeserver/ home_server.yaml
+```
+
+## Tags disponibles
+
+* *crt*: rejoue la configuration de cerbot (ou permet de l'éviter avec *--skip-tags*)
 * *dir*: rejoue la création des répertoires des espaces et des répertoires home utilisateurs (ajout/supression)
 * *frwl*: rejoue la configuration de iptables
 * *ftp*: rejoue la configuration de proftpd
-* *hms*: rejoue la configuration de os, dir, users
+* *hms*: rejoue la configuration des tags: os, dir, users
 * *http*: rejoue la configuration de apache2
 * *os*: rejoue la configuration du hostname, des répertoires de base, de ssh
 * *smb*: rejoue la configuration de samba
