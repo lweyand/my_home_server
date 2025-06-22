@@ -8,6 +8,7 @@
 - name: OS| Install python passlib
   pip:
     name: passlib
+    break_system_packages: true
 
 - name: OS| configure sshd
   template:

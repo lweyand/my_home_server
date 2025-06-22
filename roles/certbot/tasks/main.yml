@@ -46,6 +46,7 @@
   failed_when: "demon_reload.rc > 0"
   changed_when: "demon_reload.rc == 0"
   when: "certbot_services.changed == true or deploy_auth_script.changed == true"
+
 - name: Certbot| Systemctl enable
   command: systemctl enable {{ item }}
   register: demon_enable
@@ -55,6 +56,7 @@
   loop:
     - 'certbot.service'
     - 'certbot.timer'
+
 - name: Certbot| Systemctl start and create certificates
   command: systemctl start {{ item }}
   register: demon_start

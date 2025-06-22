@@ -1,6 +1,6 @@
 ---
 
-- name: Apache| Install apache2 & php7
+- name: Apache| Install apache2 & php8
   apt:
     name: "{{ httpd_packages | join(',') }}"
     state: present
@@ -19,8 +19,8 @@
   template:
     src: "apache2.conf"
     dest: "/etc/apache2/apache2.conf"
-    owner: "{{ apache_user }}"
-    group: "{{ apache_group }}"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
   notify:
     - restart httpd
 
@@ -28,8 +28,8 @@
   template:
     src: "apache2.conf"
     dest: "/etc/apache2/apache2.conf"
-    owner: "{{ apache_user }}"
-    group: "{{ apache_group }}"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
     backup: yes
     validate: 'apachectl -f /etc/apache2/apache2.conf'
   notify:
@@ -39,8 +39,8 @@
   template:
     src: "default-virtualhost.conf"
     dest: "/etc/apache2/sites-available/default.conf"
-    owner: "{{ apache_user }}"
-    group: "{{ apache_group }}"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
   notify:
     - restart httpd
 - name: Apache| Create symlink to activate default
@@ -48,8 +48,8 @@
     src: "/etc/apache2/sites-available/default.conf"
     dest: "/etc/apache2/sites-enabled/000-default.conf"
     state: link
-    owner: "{{ apache_user }}"
-    group: "{{ apache_group }}"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
   notify:
     - restart httpd
 
@@ -57,9 +57,9 @@
 - name: Apache| Deploy virtual hosts Configuration
   template:
     src: "space-virtualhost.conf"
-    dest: "/etc/apache2/sites-available/{{ item.key }}.conf"
-    owner: "{{ apache_user }}"
-    group: "{{ apache_group }}"
+    dest: "/etc/apache2/sites-available/{{ item.key }}.conf"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
   when: "'http' in item.value.services and 'no_access' != item.value.web_access and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
   notify:
@@ -67,7 +67,7 @@
 
 - name: Apache| Delete virtual hosts Configuration
   file:
-    dest: "/etc/apache2/sites-available/{{ item.key }}.conf"
+    dest: "/etc/apache2/sites-available/{{ item.key }}.conf"
     state: absent
   when: "'http' in item.value.services and 'no_access' != item.value.web_access and 'absent' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
@@ -76,11 +76,11 @@
 
 - name: Apache| Create symlink to activate
   file:
-    src: "/etc/apache2/sites-available/{{ item.key }}.conf"
-    dest: "/etc/apache2/sites-enabled/{{ item.key }}.conf"
+    src: "/etc/apache2/sites-available/{{ item.key }}.conf"
+    dest: "/etc/apache2/sites-enabled/{{ item.key }}.conf"
     state: link
-    owner: "{{ apache_user }}"
-    group: "{{ apache_group }}"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
   when: "'http' in item.value.services and 'no_access' != item.value.web_access and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
   notify:
@@ -88,7 +88,7 @@
 
 - name: Apache| Delete symlink to disable
   file:
-    dest: "/etc/apache2/sites-enabled/{{ item.key }}.conf"
+    dest: "/etc/apache2/sites-enabled/{{ item.key }}.conf"
     state: absent
   when: "'http' in item.value.services and 'no_access' != item.value.web_access and 'absent' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
@@ -100,7 +100,7 @@
     state: present
     name: "{{ item }}"
   with_items:
-  - "{{ httpd_modules }}"
+  - "{{ httpd_modules }}"
   notify:
     - restart httpd
 

@@ -6,30 +6,62 @@ samba_root: "{{ base_path }}"
 # Samba packages to instal
 samba_packages:
   - attr
-  - libaio1
+  - ibverbs-providers
   - libavahi-client3
   - libavahi-common-data
   - libavahi-common3
+  - libboost-iostreams1.74.0
+  - libboost-thread1.74.0
+  - libcephfs2
   - libcups2
-  - libfile-copy-recursive-perl
+  - libfmt9
+  - libgfapi0
+  - libgfrpc0
+  - libgfxdr0
+  - libglusterfs0
   - libgpgme11
-  - libldb1
-  - libpython2.7
+  - libibverbs1
+  - libldb2
+  - libncurses6
+  - librados2
+  - librdmacm1
   - libtalloc2
   - libtdb1
   - libtevent0
+  - liburing2
   - libwbclient0
-  - python-crypto
-  - python-dnspython
-  - python-ldb
-  - python-samba
-  - python-talloc
-  - python-tdb
+  - libyaml-0-2
+  - python3-anyio
+  - python3-cffi-backend
+  - python3-click
+  - python3-colorama
+  - python3-cryptography
+  - python3-dnspython
+  - python3-gpg
+  - python3-h11
+  - python3-h2
+  - python3-hpack
+  - python3-httpcore
+  - python3-httpx
+  - python3-hyperframe
+  - python3-ldb
+  - python3-markdown
+  - python3-markdown-it
+  - python3-mdurl
+  - python3-pygments
+  - python3-requests-toolbelt
+  - python3-rfc3986
+  - python3-rich
+  - python3-samba
+  - python3-sniffio
+  - python3-talloc
+  - python3-tdb
+  - python3-yaml
   - samba
+  - samba-ad-provision
   - samba-common
   - samba-common-bin
   - samba-dsdb-modules
   - samba-libs
   - samba-vfs-modules
   - tdb-tools
-  - update-inetd

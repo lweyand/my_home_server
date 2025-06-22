@@ -34,13 +34,13 @@ COMMIT
 # Deny multicast
 --append INPUT --source 224.0.0.0/4 --jump rejectedLog
 --append INPUT --destination 224.0.0.0/4 --jump rejectedLog
---append OUTPUT --source 224.0.0.0/4 --jump rejectedLog
---append OUTPUT --destination 224.0.0.0/4 --jump rejectedLog
+#--append OUTPUT --source 224.0.0.0/4 --jump rejectedLog
+#--append OUTPUT --destination 224.0.0.0/4 --jump rejectedLog
 
 # Allow DHCP
 #--append INPUT --policy udp --dport 67:68 -i {-- { inter_ip } --} --jump ACCEPT
 
-# Check ICMP INPUT
+# Check ICMP INPUT
 --append INPUT --protocol icmp --jump InboundICMP
 --append INPUT --protocol icmp --jump rejectedLog
 --append InboundICMP --protocol icmp --jump rejectedLog
@@ -58,7 +58,7 @@ COMMIT
 # Filter TCP Input
 --append INPUT --protocol tcp --syn --jump InboundTCP
 --append INPUT --protocol tcp --syn --jump rejectedLog
-{% if firewall.closed_tcp_ports | length > 0 %}
+{% if firewall.closed_tcp_ports | length > 0 %}
 {% for port in firewall.closed_tcp_ports %}
 --append InboundTCP --protocol tcp --destination {{ exter_ip }} --dport {{ port }} --src 0.0.0.0/0 --jump DROP
 {% endfor %}
@@ -68,7 +68,7 @@ COMMIT
 {% endfor %}
 
 # Filter UDP Input
-{% if firewall.closed_udp_ports | length > 0 %}
+{% if firewall.closed_udp_ports | length > 0 %}
 {% for port in firewall.closed_udp_ports %}
 --append InboundUDP --protocol udp --destination {{ exter_ip }} --dport {{ port }} --src 0.0.0.0/0 --jump DROP
 {% endfor %}

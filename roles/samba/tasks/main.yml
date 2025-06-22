@@ -8,7 +8,7 @@
 - name: Samba| Compute space users
   set_fact:
     server_users_psswds: "{{ server_users | combine(server_passwords, recursive=True)}}"
-    spaces_users: "{{ spaces  | dict2items | json_query(user_space_query) | unique}}"
+    spaces_users: "{{ spaces | dict2items | json_query(user_space_query) | unique}}"
   vars:
     user_space_query: "[?value.user != '{{ apache_user }}'].value.user"
 
@@ -23,6 +23,7 @@
     get_query: "[?value.state == 'present'].value.password"
   notify:
     - restart samba
+
 - name: Samba| Delete samba users
   shell: "pdbedit -x {{ item }}"
   register: pdbedit

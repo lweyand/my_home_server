@@ -51,6 +51,7 @@
     state: "{{ item.value.state }}"
     append: no
   loop: "{{ lookup('dict', server_users_psswds ) }}"
+  no_log: True
 
 - name: Users| Delete users primary groups
   group:
