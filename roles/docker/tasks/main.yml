@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for docker
+- name: "Install"
+  include_tasks: install.yml
+# - name: "Remove"
+#   include_tasks: remove.yml

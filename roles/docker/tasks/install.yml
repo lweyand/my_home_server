@@ -1,0 +1,49 @@
+---
+# tasks file for docker
+- name: "Get os version"
+  command: lsb_release -cs
+  register: os_version
+  changed_when: false
+# Docker
+- name: "Add Docker Apt signing key, uses whichever key is at the URL"
+  become: yes
+  apt_key:
+    url: "{{ docker.gpg_uri }}"
+    state: present
+- name: "Add Docker repository"
+  become: yes
+  apt_repository:
+    repo: "deb [arch=amd64] {{ docker.uri }} {{ os_version.stdout }} stable"
+    state: present
+  register: dock_repo_updated
+- name: "Refresh apt cache"
+  become: yes
+  apt:
+    update_cache: yes
+  when: dock_repo_updated.changed == true
+- name: "Install Docker"
+  become: yes
+  apt:
+    name: "{{ docker.packages | join(',') }}"
+    state: present
+# - name: "Add user {{ docker_user.user_to_add }} to docker group"
+#   become: yes
+#   user:
+#     name: "{{ docker_user.user_to_add }}"
+#     group: docker
+# - name: "Get OS"
+#   command: 'uname -s'
+#   register: dock_comp_os
+# - name: "Get OS x86"
+#   command: 'uname -m'
+#   register: dock_comp_x86
+# - name: "Docker compose"
+#   become: yes
+#   get_url:
+#     url: "{{ docker_compose.uri }}/{{ docker_compose.version }}/docker-compose-{{ dock_comp_os.stdout_lines[0] }}-aarch64"
+#     dest: "{{ docker_compose.target }}"
+#     mode: u=rwx,g=rx,o=rx
+# - name: "Docker compose completion"
+#   get_url:
+#     url: "{{ docker_compose.completion_uri }}"
+#     dest: "{{ docker_compose.completion_target }}"

@@ -46,3 +46,16 @@
         name: unattended_upgrades
       tags:
         - uau
+    - name: import docker
+      import_role:
+        name: docker
+      tags:
+        - dok
+
+    - name: install mdns
+      ansible.builtin.package:
+        name:
+          - avahi-daemon
+          - libavahi-core7
+          - libnss-mdns
+        state: latest

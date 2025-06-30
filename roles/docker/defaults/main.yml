@@ -1,0 +1,17 @@
+---
+
+docker:
+  gpg_uri: https://download.docker.com/linux/debian/gpg
+  uri: https://download.docker.com/linux/debian
+  packages:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-compose
+
+# docker_compose:
+#   version: 'v2.37.3'
+#   uri: "https://github.com/docker/compose/releases/download"
+#   target: '/usr/local/bin/docker-compose'
+#   completion_uri: "https://raw.githubusercontent.com/docker/compose/2.37.3/contrib/completion/bash/docker-compose"
+#   completion_target: '/home/muzo/.config/bash.d/20_completion_docker_compose'
