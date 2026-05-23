@@ -1,6 +1,6 @@
 ---
 
-php_version: 8.2
+php_version: 8.4
 
 # Apache httpd packages to install
 httpd_packages:
@@ -13,7 +13,7 @@ httpd_packages:
   - "php{{ php_version }}-imagick"
 # - php7.3-mcrypt
   - "php{{ php_version }}-dev"
-  - 'libpcre3-dev'
+  - 'libpcre2-dev'
   - 'libapache2-mod-authnz-external'
   - 'pwauth'
 

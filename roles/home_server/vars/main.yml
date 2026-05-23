@@ -17,3 +17,4 @@ base_packages:
   - net-tools
   - apt-transport-https
   - python3-pip
+  - python3-debian

@@ -16,3 +16,5 @@ proftpd_access: 'public'
 # - LAN
 # - everywhere
 proftp_auth: 'everywhere'
+
+proftpd_state: 'present'

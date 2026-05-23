@@ -1,45 +1,9 @@
 ---
 
-- name: Proftpd| Install proftpd
-  apt:
-    name: "{{ proftpd_packages | join(',') }}"
-    state: present
+- name: Proftpd| Install
+  ansible.builtin.include_tasks: 'install.yml'
+  when: proftpd_state == 'present'
 
-- name: Proftpd| Deploy base configuration
-  template:
-    src: 'proftpd.conf'
-    dest: '/etc/proftpd/proftpd.conf'
-    owner: "{{ proftpd_user }}"
-    group: "{{ proftpd_group }}"
-    backup: no
-  notify:
-    - restart ftp
-
-- name: Proftpd| Deploy space Configuration
-  template:
-    src: 'space-directory.conf'
-    dest: "/etc/proftpd/conf.d/{{ item.key }}.conf"
-    owner: "{{ proftpd_user }}"
-    group: "{{ proftpd_user }}"
-  loop: "{{ lookup('dict', spaces) }}"
-  when: "'present' == item.value.state"
-  notify:
-    - restart ftp
-
-- name: Proftpd| Delete space Configuration
-  file:
-    path: "/etc/proftpd/conf.d/{{ item.key }}.conf"
-    state: absent
-  loop: "{{ lookup('dict', spaces) }}"
-  when: "'absent' == item.value.state"
-  notify:
-    - restart ftp
-
-- name: Proftpd| Deploy default file
-  template:
-    src: "file.txt"
-    dest: "{{ base_path }}/{{ item.key }}/{{ ftp_dir }}/{{ item.key }}.txt"
-    owner: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
-    group: "{%if item.value.short_name is defined %}{{ item.value.short_name }}{%else%}{{ item.key }}{%endif%}"
-  when: "'ftp' in item.value.services and 'present' == item.value.state and 'true' == proftpd_test_files"
-  loop: "{{ lookup('dict', spaces) }}"
+- name: Proftpd| Remove
+  ansible.builtin.include_tasks: 'remove.yml'
+  when: proftpd_state == 'absent'

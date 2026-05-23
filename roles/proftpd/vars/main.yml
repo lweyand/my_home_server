@@ -6,4 +6,4 @@ proftpd_base_conf: '/etc/proftpd/'
 proftpd_shared_group: 'shared'
 # proftpd packages to install
 proftpd_packages:
-  - 'proftpd-basic'
+  - 'proftpd-core'

@@ -27,8 +27,11 @@
       tags:
         - smb
     - name: import ftp role
-      import_role:
+      ansible.builtin.import_role:
+      # ansible.builtin.include_role:
         name: proftpd
+      vars:
+        proftpd_state: 'absent'
       tags:
         - ftp
     - name: import certbot role

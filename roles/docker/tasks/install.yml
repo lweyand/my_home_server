@@ -4,17 +4,16 @@
   command: lsb_release -cs
   register: os_version
   changed_when: false
-# Docker
-- name: "Add Docker Apt signing key, uses whichever key is at the URL"
-  become: yes
-  apt_key:
-    url: "{{ docker.gpg_uri }}"
-    state: present
 - name: "Add Docker repository"
   become: yes
-  apt_repository:
-    repo: "deb [arch=amd64] {{ docker.uri }} {{ os_version.stdout }} stable"
-    state: present
+  deb822_repository:
+    name: docker
+    types: deb
+    uris: "{{ docker.uri }}"
+    suites: '{{ ansible_distribution_release }}'
+    components: stable
+    architectures: amd64
+    signed_by: "{{ docker.gpg_uri }}"
   register: dock_repo_updated
 - name: "Refresh apt cache"
   become: yes

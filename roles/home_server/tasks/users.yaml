@@ -2,6 +2,7 @@
 
 - name: Users| Compute server_groups_present & server_primary_groups_absent
   set_fact:
+    # server_groups_present: "{{ server_users | dict2items | json_query(select_groups_present) | flatten | unique }}"
     server_groups_present: "{{ server_users | dict2items | json_query(select_groups_present) | flatten | unique + [ proftpd_shared_group ] }}"
     server_primary_groups_absent: "{{ server_users | dict2items | json_query(select_groups_absent) | flatten | unique }}"
   vars:
@@ -43,6 +44,7 @@
   user:
     name: "{{ item.key }}"
     group: "{{ item.key }}"
+    # groups: "{{ item.value.groups | join(',') }}"
     groups: "{% if item.value.groups is defined %}{{ item.value.groups | join(',') + ',' + proftpd_shared_group }}{% else %}{{ proftpd_shared_group }}{%endif%}"
     shell: "{% if item.value.shell is defined %}{{ item.value.shell }}{% else %}/bin/rbash{%endif%}"
     password: "{{ item.value.password | password_hash('sha512', secret_salt) }}"

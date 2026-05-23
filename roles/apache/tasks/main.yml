@@ -104,6 +104,19 @@
   notify:
     - restart httpd
 
+- name: Apache| Stat index.php
+  stat:
+    path: "{{ base_path }}/{{ item.key }}/{{ html_dir }}/index.php"
+  register:
+    indexphp_files
+  loop: "{{ lookup('dict', spaces) }}"
+- debug:
+    var: indexphp_files.results
+  # vars:
+  #   select_query: "[?key=='{{ item }}']"
+  #   get_query: "[?value.state == 'absent'].value.password"
+
+  # TODO: Ne pas créer index.* si le fichier intex.php existe déjà
 - name: Apache| Deploy base index html
   template:
     src: "index.html"
@@ -113,7 +126,6 @@
     force: no
   when: "'http' in item.value.services and 'present' == item.value.state"
   loop: "{{ lookup('dict', spaces) }}"
-
 - name: Apache| Deploy base index php
   template:
     src: "index.php"

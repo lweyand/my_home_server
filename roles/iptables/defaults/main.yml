@@ -30,6 +30,8 @@ firewall:
     - 80
     - 443
     - 995
+    - 3000
+    - 9090
   opened_udp_ports:
     - 137:138
   closed_tcp_ports: []

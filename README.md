@@ -255,3 +255,12 @@ ansible-playbook -i inventory/myhomeserver/ home_server.yaml
 * *smb*: rejoue la configuration de samba
 * *uau*: rejoue la configuration de unattended upgrades
 * *users*: rejoue la configuration des utilisateurs (ajout/supression)
+
+## Problèmes
+
+sshd démarre avant l'interface:
+modifier
+nano /etc/network/interfaces
+
+Ajouter
+auto wlp2s0
